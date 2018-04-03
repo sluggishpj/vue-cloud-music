@@ -1,6 +1,14 @@
 import axios from 'axios'
 
 axios.defaults.baseURL = 'http://localhost:3000'
+// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
+
+// // 拦截request,设置全局请求为ajax请求
+// axios.interceptors.request.use((config) => {
+//   config.headers['X-Requested-With'] = 'XMLHttpRequest'
+
+//   return config
+// })
 
 function doGet(url, params) {
   return new Promise((resolve, reject) => {
@@ -39,7 +47,7 @@ export default {
   },
 
   // 获取用户歌单
-  getPlaylist(uid) {
+  getUserPlaylist(uid) {
     return doGet('/user/playlist', {
       uid: uid
     })
@@ -51,5 +59,9 @@ export default {
       phone: phone,
       password: password
     })
+  },
+
+  getBilibiliPic() {
+    return doGet('/pic/bilibili')
   }
 }

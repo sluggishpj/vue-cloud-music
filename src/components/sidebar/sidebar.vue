@@ -2,13 +2,13 @@
 <template>
   <transition name="slide">
     <div class="sidebar" v-show="sidebarShow">
-      <div class="header" :style="headerBg">
+      <div class="header" v-if="!!ownUserInfo.profile" :style="headerBg">
         <div class="avatar">
-          <img :src="profile.avatarUrl">
+          <img :src="ownUserInfo.profile.avatarUrl" @click="changeDisplayedUser(ownUserInfo.profile.userId)">
         </div>
         <div class="nick-level">
-          <span class="nickname">{{profile.nickname}}</span>
-          <span class="level ignore">Lv.{{resData.level}}</span>
+          <span class="nickname">{{ownUserInfo.profile.nickname}}</span>
+          <span class="level ignore">Lv.{{ownUserInfo.level}}</span>
         </div>
         <span class="sign-in">签到</span>
       </div>
@@ -21,32 +21,26 @@
   </transition>
 </template>
 <script>
-import api from '../../fetch/api.js'
 export default {
   props: {
     sidebarShow: false
   },
-  data() {
-    return {
-      profile: {},
-      resData: {},
-      headerBg: {}
+  computed: {
+    ownUserInfo() {
+      return this.$store.getters.getOwnUserInfo
+    },
+    headerBg() {
+      return {
+        backgroundImage: 'url(' + this.$store.getters.getOwnUserInfo.profile.backgroundUrl + ')',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover'
+      }
     }
   },
-  mounted() {
-    api.getUserDetail('46088643')
-      .then(res => {
-        this.resData = res.data
-        this.profile = res.data.profile
-        this.headerBg = {
-          backgroundImage: 'url(' + this.profile.backgroundUrl + ')',
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover'
-        }
-      })
-      .catch(err => {
-        console.log(err)
-      })
+  methods: {
+    changeDisplayedUser(id) {
+      this.$store.dispatch('changeDisplayedUser', id)
+    }
   }
 }
 
@@ -58,7 +52,7 @@ export default {
   height: 100%;
   left: 0;
   top: 0;
-  background: white;
+  background: #F2F4F5;
   z-index: 20;
 }
 

@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <v-header></v-header>
+    <userinfo></userinfo>
     <keep-alive>
       <router-view/>
     </keep-alive>
@@ -8,22 +9,16 @@
 </template>
 <script>
 import header from './components/header/header.vue'
-// import api from './fetch/api.js'
-
+import userinfo from './components/userinfo/userinfo.vue'
 export default {
   components: {
-    'v-header': header
-  }
+    'v-header': header,
+    'userinfo': userinfo
+  },
 
-  // mounted() {
-  //   api.getUserDetail('278946928')
-  //     .then(res => {
-  //       console.log(res)
-  //     })
-  //     .catch(err => {
-  //       console.log(err)
-  //     })
-  // }
+  mounted() {
+    this.$store.dispatch('changeOwnUser', '46088643')
+  }
 }
 
 </script>

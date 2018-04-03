@@ -31,7 +31,7 @@
         </router-link>
       </div>
     </div>
-    <sidebar :sidebarShow="sidebarShow" @hideSidebar="hideSidebar"></sidebar>
+    <sidebar :sidebarShow="sidebarShow" @hideSidebar="hideSidebar" :ownID="ownID"></sidebar>
     <transition name="fade">
       <div class="bg-cover" @click="hideSidebar" v-show="sidebarShow"></div>
     </transition>
@@ -46,7 +46,8 @@ export default {
   },
   data() {
     return {
-      sidebarShow: false
+      sidebarShow: false,
+      ownID: '46088643'
     }
   },
   methods: {
@@ -111,7 +112,7 @@ $header-height: 92px;
   width: 100%;
   height: 100%;
   z-index: 10;
-  background: rgba(0, 0, 0, .4);
+  background: rgba(0, 0, 0, .6);
 }
 
 .fade-enter,

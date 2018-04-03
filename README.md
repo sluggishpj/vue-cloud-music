@@ -204,6 +204,26 @@ module.exports = {
 npm install node-sass sass-loader --save-dev
 ```
 
+* 要使用vuex，需安装vuex
+
+```bash
+npm install vuex --save
+```
+
+之后按vuex语法编写store，并将其导入到main.js中
+
+```js
+// main.js
+// ...
+import store from './store'
+new Vue({
+  el: '#app',
+  router,
+  store
+  //...
+})
+```
+
 
 ## 学到的知识点
 1. 使用`:style`为元素动态添加背景图片地址
@@ -236,4 +256,48 @@ npm install node-sass sass-loader --save-dev
 </script>
 ```
 
+
+2. 网页外部图片403无法显示解决方法
+在html页面中添加meta头部，设置referrer
+
+```html
+<meta name="referrer" content="no-referrer" />
+```
+> 来源：https://blog.csdn.net/h103997661/article/details/78889398
+
+
+3. 使用vue-awesome-swiper，异步获取数据，当loop为true时，第一个slide被跳过
+* 解决方法：在swipOption中设置`observer: true`和`observeParents: true`
+
+```vue
+//...
+swiperOption: {
+  loop: true, // 无限循环
+  observer: true, // 修改swiper自己或子元素时，自动初始化swiper
+  observeParents: true // 修改swiper的父元素时，自动初始化swiper
+}
+//...
+```
+> 来源：https://blog.csdn.net/weixin_38304202/article/details/77979916
+
+
+4. vue异步获取数据的某个属性成功却报引用错误
+* 原因：初始对象中没有对应的键，导致报了`TypeError: Cannot read property 'xxx' of undefined`
+* 解决方法1：初始化对象时提前定义好要引用的键
+
+```js
+// user.js
+const state = {
+  ownUserInfo: {profile: {}}, // 此处提前定义好profile
+  //...
+}
+```
+> 参考来源：https://segmentfault.com/q/1010000009552377/a-1020000009552591
+
+* 解决方法2：使用v-if判断是否要进行渲染，如果数据还没加载就不渲染了
+
+```vue
+<div class="header" v-if="!!userInfo.profile" :style="headerBg">
+```
+> 参考来源：https://blog.csdn.net/chasenzh/article/details/68950168
 
