@@ -14,11 +14,9 @@ function doGet(url, params) {
   return new Promise((resolve, reject) => {
     axios.get(url, { params: params })
       .then(res => {
-        console.log(res)
         resolve(res)
       })
       .catch(err => {
-        console.log(err)
         reject(err)
       })
   })
@@ -28,11 +26,9 @@ function doPost(url, params) {
   return new Promise((resolve, reject) => {
     axios.post(url, { params: params })
       .then(res => {
-        console.log(res)
         resolve(res)
       })
       .catch(err => {
-        console.log(err)
         reject(err)
       })
   })
@@ -61,7 +57,29 @@ export default {
     })
   },
 
+  // 获取B站排行榜图片
   getBilibiliPic() {
     return doGet('/pic/bilibili')
+  },
+
+  // 获取关注列表
+  getFollows(uid) {
+    return doGet('/user/follows', {
+      uid: uid
+    })
+  },
+
+  // 获取粉丝列表
+  getFolloweds(uid) {
+    return doGet('/user/followeds', {
+      uid: uid
+    })
+  },
+
+  // 获取歌单详情
+  getPlaylistDetail(id) {
+    return doGet('/playlist/detail', {
+      id: id
+    })
   }
 }

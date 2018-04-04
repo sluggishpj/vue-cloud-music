@@ -289,7 +289,7 @@ swiperOption: {
 // user.js
 const state = {
   ownUserInfo: {profile: {}}, // 此处提前定义好profile
-  //...
+  // ...
 }
 ```
 > 参考来源：https://segmentfault.com/q/1010000009552377/a-1020000009552591
@@ -301,3 +301,27 @@ const state = {
 ```
 > 参考来源：https://blog.csdn.net/chasenzh/article/details/68950168
 
+
+5. 子组件根据父组件props动态获取数据
+在子组件中使用watch监听props变化
+
+```js
+// ...
+props: {
+  uid: ''
+},
+
+watch: {
+  uid() {
+    // 获取用户歌单列表
+    api.getUserPlaylist(this.uid)
+      .then(res => {
+        this.playlist = res.data.playlist
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+}
+
+```

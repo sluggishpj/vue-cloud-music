@@ -2,12 +2,12 @@
 <template>
   <transition name="slide">
     <div class="sidebar" v-show="sidebarShow">
-      <div class="header" v-if="!!ownUserInfo.profile" :style="headerBg">
+      <div class="header" v-if="!!profile" :style="headerBg">
         <div class="avatar">
-          <img :src="ownUserInfo.profile.avatarUrl" @click="changeDisplayedUser(ownUserInfo.profile.userId)">
+          <img :src="profile.avatarUrl" @click="changeDisplayedUser(profile.userId)">
         </div>
         <div class="nick-level">
-          <span class="nickname">{{ownUserInfo.profile.nickname}}</span>
+          <span class="nickname">{{profile.nickname}}</span>
           <span class="level ignore">Lv.{{ownUserInfo.level}}</span>
         </div>
         <span class="sign-in">签到</span>
@@ -35,10 +35,15 @@ export default {
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover'
       }
+    },
+    profile() {
+      return this.ownUserInfo.profile
     }
   },
   methods: {
+    // 显示用户详情
     changeDisplayedUser(id) {
+      this.$emit('hideSidebar') // 通知父组件隐藏本组件
       this.$store.dispatch('changeDisplayedUser', id)
     }
   }
@@ -66,15 +71,6 @@ export default {
 .slide-enter-active,
 .slide-leave-active {
   transition: all .3s linear;
-}
-
-@keyframes slide-out {
-  0% {
-    transform: translate3d(-100%, 0, 0);
-  }
-  100% {
-    transform: translate3d(100%, 0, 0);
-  }
 }
 
 // 含背景图片的div
