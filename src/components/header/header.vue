@@ -31,7 +31,7 @@
         </router-link>
       </div>
     </div>
-    <sidebar :sidebarShow="sidebarShow" @hideSidebar="hideSidebar" :ownID="ownID"></sidebar>
+    <sidebar :sidebar-show="sidebarShow" @hideSidebar="hideSidebar" :ownID="ownID"></sidebar>
     <transition name="fade">
       <div class="bg-cover" @click="hideSidebar" v-show="sidebarShow"></div>
     </transition>
@@ -68,7 +68,7 @@ $header-height: 92px;
   background: white;
   display: flex;
   justify-content: center;
-  box-shadow: 0 2px 4px -4px #ccc;
+  box-shadow: 0 1px 1px 0px #ccc;
 }
 
 .side-menu,

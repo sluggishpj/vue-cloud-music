@@ -325,3 +325,15 @@ watch: {
 }
 
 ```
+
+6. rotate不适用于inline元素
+
+7. `<router-link>`绑定点击事件需要使用`.native`修饰符
+
+```vue
+<router-link @click.native="toggleUserDetail" :to="{path: '/userlist', query:{uid:uid, userlistType:'follows'}}" class="tab-item">
+  <span class="title">关注</span><span>{{profile.follows}}</span>
+</router-link>
+```
+
+8. 通过路由给子组件传递数据

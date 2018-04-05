@@ -6,7 +6,7 @@ import PrivateFM from '@/components/privateFM/privateFM'
 import DayRecommend from '@/components/dayrecommend/dayrecommend'
 import Grin from '@/components/grin/grin'
 import Heart from '@/components/heart/heart'
-
+import Userlist from '@/components/userlist/userlist'
 Vue.use(Router)
 
 export default new Router({
@@ -21,6 +21,11 @@ export default new Router({
       {path: '/privateFM', component: PrivateFM},
       {path: '/dayrecommend', component: DayRecommend}
     ]
+  },
+  {
+    path: '/userlist',
+    component: Userlist,
+    props: true
   },
   {
     path: '/search',

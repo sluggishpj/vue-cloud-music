@@ -1,6 +1,6 @@
 <!-- 歌单列表 -->
 <template>
-  <div class="play-list" v-if="playlist && playlist.length && profile">
+  <div class="play-list" v-if="playlist && playlist.length && profile && playlistShow">
     <div class="self-playlist">
       <span class="title">歌单({{profile.playlistCount}})</span>
       <ul>
@@ -24,8 +24,8 @@
         </li>
       </ul>
     </div>
-    <div class="other-playlist">
-      <span class="title">收藏的歌单({{profile.playlistBeSubscribedCount}})</span>
+    <div class="other-playlist" v-if="subscribedCount">
+      <span class="title">收藏的歌单({{subscribedCount}})</span>
       <ul>
         <li v-for="(item, index) in otherPlaylist" :key="index" @click="showPlaylistInfo(item.id)" class="list-item">
           <span class="icon">
@@ -45,7 +45,8 @@ import api from '../../fetch/api.js'
 
 export default {
   props: {
-    uid: ''
+    uid: '',
+    playlistShow: false
   },
 
   data() {
@@ -70,15 +71,15 @@ export default {
         return item.userId !== this.uid
       })
     },
-    author() {
-      // 更新当前作者
-      if (this.uid != this.$store.getters.getOwnUserID) {
-        console.log('this.uid', this.uid)
-        console.log('this.$store.getters.getOwnUserID', this.$store.getters.getOwnUserID)
+    author() { // 更新当前作者
+      if (this.uid !== this.$store.getters.getOwnUserID.toString()) {
         return this.profile.nickname
       } else {
         return '我的'
       }
+    },
+    subscribedCount() {
+      return this.otherPlaylist.length
     }
   },
   watch: {

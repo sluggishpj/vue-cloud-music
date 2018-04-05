@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?bchv2d');
-  src:  url('fonts/icomoon.eot?bchv2d#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?bchv2d') format('truetype'),
-    url('fonts/icomoon.woff?bchv2d') format('woff'),
-    url('fonts/icomoon.svg?bchv2d#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?ubkbck');
+  src:  url('fonts/icomoon.eot?ubkbck#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?ubkbck') format('truetype'),
+    url('fonts/icomoon.woff?ubkbck') format('woff'),
+    url('fonts/icomoon.svg?ubkbck#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -80,4 +80,7 @@
 }
 .icon-shuffle:before {
   content: "\ea30";
+}
+.icon-arrow-left2:before {
+  content: "\ea40";
 }

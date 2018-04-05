@@ -2,7 +2,7 @@
 <template>
   <transition name="fade">
     <div class="user-info" v-show="isShowUserDetail">
-      <div class="back-arrow"><span @click="toggleUserDetail"><img src="../../assets/back.png" height="16" width="16" alt=""></span></div>
+      <div class="back-arrow"><span @click="toggleUserDetail" class="icon-arrow-left2"></span></div>
       <div class="header" :style="headerBg" v-if="!!profile">
         <div class="avatar">
           <img :src="profile.avatarUrl">
@@ -13,40 +13,33 @@
           <span class="level">Lv.{{userInfo.level}}</span>
         </div>
         <!-- 动态关注粉丝3按钮 -->
-        <div class="tab">
-          <div class="tab-item">
+        <div class="tab" v-if="uid">
+          <router-link @click.native="toggleUserDetail" to="/userevent" class="tab-item">
             <span class="title">动态</span><span>{{profile.eventCount}}</span>
-          </div>
-          <div class="tab-item" @click="showUserlist('follows',uid)">
+          </router-link>
+          <router-link @click.native="toggleUserDetail" :to="{path: '/userlist', query:{uid:uid, userlistType:'follows'}}" class="tab-item">
             <span class="title">关注</span><span>{{profile.follows}}</span>
-          </div>
-          <div class="tab-item">
-            <span class="title" @click="showUserlist('followeds',uid)">粉丝</span><span>{{profile.followeds}}</span>
-          </div>
+          </router-link>
+          <router-link @click.native="toggleUserDetail" :to="{path: '/userlist', query:{uid:uid, userlistType:'followeds'}}" class="tab-item">
+            <span class="title">粉丝</span><span>{{profile.followeds}}</span>
+          </router-link>
         </div>
       </div>
       <!-- 歌单列表 -->
-      <playlist :uid="uid"></playlist>
-      <!-- 用户列表 -->
-      <userlist :userlist-show="userlistShow" :userlist="userlist" :userlist-title="userlistTitle" @hideUserlist="hideUserlist"></userlist>
+      <playlist :uid="uid" :playlistShow="playlistShow"></playlist>
     </div>
   </transition>
 </template>
 <script>
 import playlist from '../playlist/playlist.vue'
-import userlist from '../userlist/userlist.vue'
-import api from '../../fetch/api.js'
 
 export default {
   components: {
-    playlist,
-    userlist
+    playlist
   },
   data() {
     return {
-      userlistShow: false,
-      userlistTitle: '',
-      userlist: []
+      playlistShow: true
     }
   },
   computed: {
@@ -67,7 +60,6 @@ export default {
       return this.userInfo.profile
     },
     uid() {
-      console.log('this.$store.getters.getDisplayedUserID', this.$store.getters.getDisplayedUserID)
       return this.$store.getters.getDisplayedUserID
     }
   },
@@ -75,27 +67,6 @@ export default {
   methods: {
     toggleUserDetail() {
       this.$store.commit('toggleUserDetail')
-    },
-    hideUserlist() {
-      this.userlistShow = false
-    },
-    showUserlist(type, uid) {
-      this.userlistShow = true
-      if (type === 'follows') {
-        // 关注
-        this.userlistTitle = '关注'
-        api.getFollows(uid).then((res) => {
-          console.log('getFollows', res)
-          this.userlist = res.data.follow
-        })
-      } else if (type === 'followeds') {
-        // 粉丝
-        this.userlistTitle = '粉丝'
-        api.getFolloweds(uid).then((res) => {
-          console.log('getFolloweds', res)
-          this.userlist = res.data.followeds
-        })
-      }
     }
   }
 }
@@ -109,7 +80,7 @@ export default {
   width: 100%;
   height: 574px;
   z-index: 40;
-  background: yellow;
+  background: rgba(0, 0, 0, .1);
   .back-arrow {
     // 返回箭头
     position: fixed;
@@ -118,7 +89,8 @@ export default {
     color: #fff;
     z-index: 50;
     width: 100%;
-    height: 88px; // background: rgba(0, 0, 0, .1);
+    height: 112px;
+    background: rgba(0, 0, 0, .05);
     text-align: left;
     span {
       display: flex;
@@ -134,7 +106,6 @@ export default {
     width: 100%;
     height: 600px;
     color: white;
-    background: #ccc;
     position: relative;
 
     .avatar {
@@ -192,6 +163,7 @@ export default {
       bottom: 0;
       height: 88px;
       background: rgba(0, 0, 0, .3);
+      z-index: 50;
 
       .tab-item {
         flex: 1;
@@ -204,7 +176,7 @@ export default {
           padding: 4px;
         }
         .title {
-          color: #A0A2A5;
+          color: #E0E0D8;
         }
       }
     }
