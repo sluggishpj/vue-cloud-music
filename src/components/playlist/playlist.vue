@@ -13,7 +13,7 @@
           <span class="item-count">累计听歌{{userInfo.listenSongs}}首</span>
           </span>
         </li>
-        <li v-for="(item, index) in selfPlaylist" :key="index" @click="showPlaylistInfo(item.id)" class="list-item">
+        <li v-for="(item, index) in selfPlaylist" :key="index" @click="showPlaylistDetail(item.id)" class="list-item">
           <span class="icon">
             <img :src="item.coverImgUrl">
           </span>
@@ -27,7 +27,7 @@
     <div class="other-playlist" v-if="subscribedCount">
       <span class="title">收藏的歌单({{subscribedCount}})</span>
       <ul>
-        <li v-for="(item, index) in otherPlaylist" :key="index" @click="showPlaylistInfo(item.id)" class="list-item">
+        <li v-for="(item, index) in otherPlaylist" :key="index" @click="showPlaylistDetail(item.id)" class="list-item">
           <span class="icon">
             <img :src="item.coverImgUrl">
           </span>
@@ -96,8 +96,9 @@ export default {
     }
   },
   methods: {
-    showPlaylistInfo(id) {
-
+    showPlaylistDetail(id) { // 显示歌单详情
+      this.$store.commit('toggleUserDetail')
+      this.$store.dispatch('changeDisplayedList', id)
     }
   }
 }

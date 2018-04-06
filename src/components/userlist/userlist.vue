@@ -55,6 +55,7 @@ export default {
         next(vm => {
           vm.userlist = res.data.follow
           vm.userlistTitle = '关注'
+          vm.shouldShowUserDetail = true
         })
       }).catch(err => {
         console.log(err)

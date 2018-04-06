@@ -30,6 +30,9 @@ npm run build --report
 [vue-awesome-swiper](https://github.com/surmon-china/vue-awesome-swiper)
 
 
+#### 阻止子容器滚动完引起父容器滚动
+[vue-scroll-lock](https://github.com/smackgg/vue-scroll-lock)
+
 
 #### 图片懒加载
 

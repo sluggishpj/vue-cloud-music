@@ -1,3 +1,5 @@
+// 当前用户与被显示的的用户
+
 import api from '../../fetch/api.js'
 
 const state = {

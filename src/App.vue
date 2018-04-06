@@ -2,6 +2,7 @@
   <div id="app">
     <v-header></v-header>
     <userinfo></userinfo>
+    <playlist-detail></playlist-detail>
     <keep-alive>
       <router-view/>
     </keep-alive>
@@ -10,10 +11,13 @@
 <script>
 import header from './components/header/header.vue'
 import userinfo from './components/userinfo/userinfo.vue'
+import playlistDetail from './components/playlist-detail/playlist-detail.vue'
+
 export default {
   components: {
     'v-header': header,
-    'userinfo': userinfo
+    'userinfo': userinfo,
+    'playlist-detail': playlistDetail
   },
 
   mounted() {

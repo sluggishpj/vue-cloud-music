@@ -6,6 +6,9 @@ import router from './router'
 import './common/styles/index.scss'
 import store from './store'
 
+import VueScrollLock from 'vue-scroll-lock'
+Vue.use(VueScrollLock)
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
