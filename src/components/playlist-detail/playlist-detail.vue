@@ -33,6 +33,7 @@
       </div>
     </div>
     <songlist :list-info="listInfo"></songlist>
+    <!-- <v-search></v-search> -->
   </div>
 </template>
 <script>
@@ -107,7 +108,7 @@ export default {
       top: 0;
       color: #fff;
       z-index: 20;
-      background: rgba(0, 0, 0, .05);
+      background: rgba(0, 0, 0, .2);
       .back-arrow {
         // 返回箭头
         width: 112px;

@@ -81,5 +81,13 @@ export default {
     return doGet('/playlist/detail', {
       id: id
     })
+  },
+
+  // 获取音乐URL
+  getSongURL(id) {
+    return doGet('/music/url', {
+      id: id
+    })
   }
+
 }

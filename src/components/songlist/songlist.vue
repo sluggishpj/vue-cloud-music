@@ -6,12 +6,14 @@
       <span class="title">播放全部<span class="count">(共{{listInfo.trackCount}}首)</span></span>
     </div>
     <ul class="list">
-      <li class="list-item" v-for="(item, idx) in listInfo.tracks" :key="idx">
-        <span class="serial-num">{{idx+1}}</span>
+      <li class="list-item" v-for="(item, idx) in listInfo.tracks" :key="idx" @click="playSong(item.id)">
+        <span class="serial-num" :class="{'icon-volume-medium':item.id===playingSongID}">{{item.id===playingSongID?'':(idx+1)}}</span>
         <div class="item-detail">
-          <span class="name">{{item.name}}</span>
-          <span class="artists" v-for="(artist, idx) in item.artists" :key="idx">{{artist.name}} </span>
-          <span class="album">- {{item.album.name}}</span>
+          <div class="name">{{item.name}}</div>
+          <div class="artist-album">
+            <span class="artists" v-for="(artist, idx) in item.artists" :key="idx">{{artist.name}} </span>
+            <span class="album">- {{item.album.name}}</span>
+          </div>
         </div>
       </li>
     </ul>
@@ -19,14 +21,25 @@
 </template>
 <script>
 export default {
+  computed: {
+    playingSongID() {
+      return this.$store.getters.getSongID
+    }
+  },
   props: {
     listInfo: {}
+  },
+  methods: {
+    playSong(id) {
+      this.$store.dispatch('changePlayingSong', id)
+    }
   }
 }
 
 </script>
 <style lang="scss" scoped>
 .songlist {
+  width: 100%; // overflow: hidden;
   .header {
     height: 102px;
     display: flex;
@@ -46,19 +59,45 @@ export default {
     }
   }
   .list-item {
-    display: block;
-    position: relative;
-    height: 128px;
     display: flex;
+    position: relative;
+    align-items: center;
+    height: 128px;
+    width: 100%;
     .serial-num {
-      flex: 0 0 78px;
-      background: yellow;
+      color: #999999;
+      flex: 0 0 110px;
+      &.icon-volume-medium {
+        color: #CE3D3E;
+      }
     }
     .item-detail {
       flex: 1;
       display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      height: 100%;
+      white-space: nowrap;
+      border-bottom: 1px solid #DADCDD;
+      overflow: hidden;
       .name {
-
+        // 歌名
+        width: 100%;
+        text-align: left;
+        overflow: hidden;
+        text-align: left;
+        text-overflow: ellipsis;
+      }
+      .artist-album {
+        // 作者及唱片
+        width: 100%;
+        padding-top: 20px;
+        font-size: 24px;
+        color: #999999;
+        overflow: hidden;
+        text-align: left;
+        text-overflow: ellipsis;
       }
     }
   }
