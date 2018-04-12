@@ -4,7 +4,7 @@
     <div class="btns">
       <!-- 侧边栏按钮 -->
       <div class="side-menu" @click="sidebarShow = !sidebarShow">
-        <span class="icon-menu"></span>
+        <span class="icon-th-menu"></span>
       </div>
       <!-- 中间三路由 -->
       <div class="main-menu">

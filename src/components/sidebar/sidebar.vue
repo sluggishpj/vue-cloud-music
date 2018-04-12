@@ -14,7 +14,7 @@
       </div>
       <div class="memulist">
         <ul>
-          <li><span class="icon-cloud"></span>我的音乐云盘</li>
+          <li><span class="icon-cloud-download"></span>我的音乐云盘</li>
         </ul>
       </div>
     </div>
@@ -58,7 +58,7 @@ export default {
   left: 0;
   top: 0;
   background: #F2F4F5;
-  z-index: 20;
+  z-index: 70;
 }
 
 // 侧边栏滑出动画

@@ -4,24 +4,35 @@ import api from '../../fetch/api.js'
 const state = {
   songID: '', // 当前播放歌的id
   songURL: '', // 当前播放的歌的URL
+  songDetail: '', // 当前播放的歌的详细信息
   playing: false, // 当前是否正在播放
-  showPlayBar: false, // 底部播放控制条
-  showPlayInterface: false // 显示播放界面，一个盘子在转，含歌词
+  songBarState: false, // 底部播放控制条
+  playInterfaceState: false // 显示播放界面，一个盘子在转，含歌词
 }
 
 const getters = {
   getSongID: state => state.songID,
-  getPlayState: state => state.playing
+  getPlayState: state => state.playing,
+  getSongDetail: state => state.songDetail,
+  getSongBarState: state => state.songBarState,
+  getInterfaceState: state => state.playInterfaceState
 }
 
 const actions = {
   // 更改正在播放的歌曲
   changePlayingSong({ state, commit }, id) {
     commit('updateSongID', id)
+    commit('showSongBar')
     api.getSongURL(id)
       .then(res => {
-        console.log('songDetail', res.data)
+        console.log('songURL', res.data)
         commit('updateSongURL', res.data.url)
+      })
+
+    api.getSongDetail(id)
+      .then(res => {
+        console.log('songDetail', res.data)
+        commit('updateSongDetail', res.data.songs[0])
       })
   }
 }
@@ -37,19 +48,28 @@ const mutations = {
     state.songURL = url
   },
 
+  // 更新歌曲详情
+  updateSongDetail(state, detail) {
+    state.songDetail = detail
+  },
+
   // 切换播放状态
   togglePlayState(state) {
     state.playing = !state.playing
   },
 
   // 切换底部播放条显示状态
-  togglePlayBar(state) {
-    state.showPlayBar = !state.showPlayBar
+  showSongBar(state) {
+    state.songBarState = true
+    console.log('show songbar')
   },
-
+  hideSongBar(state) {
+    state.songBarState = false
+    console.log('hide songbar')
+  },
   // 切换播放界面显示状态
   togglePlayInterface(state) {
-    state.showPlayInterface = !state.showPlayInterface
+    state.playInterfaceState = !state.playInterfaceState
   }
 }
 

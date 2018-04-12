@@ -3,7 +3,9 @@
   <div class="slide">
     <swiper :options="swiperOption" ref="mySwiper" v-if="picItems.length">
       <swiper-slide v-for="item in picItems" :key="item.doc_id">
-        <img :src="item.pictures[0].img_src" class="swiper-lazy" rel="noreferrer">
+        <a :href="item.pictures[0].img_src" target="_blank">
+          <img :src="item.pictures[0].img_src" class="swiper-lazy" rel="noreferrer">
+        </a>
         <div class="swiper-lazy-preloader"></div>
       </swiper-slide>
       <!-- Optional controls -->

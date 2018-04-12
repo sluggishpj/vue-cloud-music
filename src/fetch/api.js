@@ -88,6 +88,19 @@ export default {
     return doGet('/music/url', {
       id: id
     })
-  }
+  },
 
+  // 获取音乐详情
+  getSongDetail(id) {
+    return doGet('/song/detail', {
+      ids: id
+    })
+  },
+
+  // 获取歌词
+  getLyric(id) {
+    return doGet('/lyric', {
+      id: id
+    })
+  }
 }

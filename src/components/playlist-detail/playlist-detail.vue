@@ -5,7 +5,7 @@
       <div class="fixed-head">
         <span @click="hidePlaylistDetail" class="icon-arrow-left2 back-arrow"></span>
         <span class="name">歌单</span>
-        <span class="icon-search search"></span>
+        <span class="icon-search search" @click="showSearchList"></span>
       </div>
       <div class="list-info">
         <div class="cover">
@@ -33,19 +33,24 @@
       </div>
     </div>
     <songlist :list-info="listInfo"></songlist>
-    <!-- <v-search></v-search> -->
+    <scroll-lock class="lock-div" v-if="searchListShow" :lock="true" :bodyLock="true">
+      <searchlist :tracks="listInfo.tracks" @hideSearchList="hideSearchList" :playingSongID="playingSongID"></searchlist>
+    </scroll-lock>
   </div>
 </template>
 <script>
 import songlist from '../songlist/songlist.vue'
+import searchlist from '../search/search.vue'
 
 export default {
   components: {
-    songlist
+    songlist,
+    searchlist
   },
   data() {
     return {
-      backShouldShowUserDetail: true
+      backShouldShowUserDetail: true,
+      searchListShow: false
     }
   },
 
@@ -55,6 +60,9 @@ export default {
     },
     listInfo() {
       return this.$store.getters.getDisplayedListInfo
+    },
+    playingSongID() {
+      return this.$store.getters.getSongID
     }
   },
   methods: {
@@ -67,6 +75,12 @@ export default {
     showUserDetail(uid) {
       this.backShouldShowUserDetail = false
       this.$store.dispatch('changeDisplayedUser', uid) // 显示具体用户
+    },
+    showSearchList() {
+      this.searchListShow = true
+    },
+    hideSearchList() {
+      this.searchListShow = false
     }
   },
 
@@ -206,6 +220,18 @@ export default {
         }
       }
     }
+  }
+
+  // 搜索列表
+  .lock-div {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: #FFF;
+    height: 100vh;
+    z-index: 50;
+    overflow: scroll;
   }
 }
 
