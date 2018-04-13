@@ -1,7 +1,7 @@
 <!-- 用户详情页 -->
 <template>
   <transition name="fade">
-    <div class="user-info" v-show="isShowUserDetail">
+    <div class="user-info" v-show="isShowUserDetail" :class="{'songbar-padding':songBarState}">
       <div class="back-arrow"><span @click="toggleUserDetail" class="icon-arrow-left2"></span></div>
       <div class="header" :style="headerBg" v-if="!!profile">
         <div class="avatar">
@@ -61,6 +61,9 @@ export default {
     },
     uid() {
       return this.$store.getters.getDisplayedUserID
+    },
+    songBarState() {
+      return this.$store.getters.getSongBarState
     }
   },
 
@@ -78,12 +81,12 @@ export default {
   left: 0;
   top: 0;
   width: 100%;
-  height: 574px;
   z-index: 40;
   background: rgba(0, 0, 0, .1);
   .back-arrow {
     // 返回箭头
     position: fixed;
+    font-size: 32px;
     left: 0;
     top: 0;
     color: #fff;

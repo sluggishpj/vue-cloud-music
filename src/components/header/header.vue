@@ -66,6 +66,7 @@ $header-height: 92px;
   width: 750px;
   height: $header-height;
   background: white;
+  font-size: 32px;
   display: flex;
   justify-content: center;
   box-shadow: 0 1px 1px 0px #ccc;
@@ -111,7 +112,7 @@ $header-height: 92px;
   top: 0;
   width: 100%;
   height: 100%;
-  z-index: 10;
+  z-index: 65;
   background: rgba(0, 0, 0, .6);
 }
 

@@ -82,6 +82,7 @@ export default {
   padding-top: 112px;
   background: #FFF;
   z-index: 40;
+  font-size: 32px;
 }
 
 .fixed-head {
@@ -107,14 +108,17 @@ export default {
     line-height: 112px;
   }
   .search-word {
+    // 关键字输入框
     flex: 1;
     height: 80%;
     border: none;
     padding: 0 10px;
+    font-size: 32px;
     border-bottom: 1px solid #ccc;
     outline-style: none;
   }
   .clear-all {
+    // 清空搜索词
     color: #000;
     font-size: 64px;
     flex: 0 0 112px;

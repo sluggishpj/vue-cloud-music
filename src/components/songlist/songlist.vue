@@ -1,6 +1,6 @@
 <!-- 歌曲列表 -->
 <template>
-  <div class="songlist">
+  <div class="songlist" :class="{'songbar-padding':songBarState}">
     <div class="header">
       <span class="icon-play2 play-btn"></span>
       <span class="title">播放全部<span class="count">(共{{listInfo.trackCount}}首)</span></span>
@@ -24,6 +24,9 @@ export default {
   computed: {
     playingSongID() {
       return this.$store.getters.getSongID
+    },
+    songBarState() {
+      return this.$store.getters.getSongBarState
     }
   },
   props: {

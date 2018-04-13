@@ -148,6 +148,7 @@ export default {
       .item-name {
         // 歌单名
         display: block;
+        font-size: 32px;
         padding: 30px 0px 10px;
       }
       .item-count {

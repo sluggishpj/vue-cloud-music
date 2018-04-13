@@ -12,6 +12,7 @@ const state = {
 
 const getters = {
   getSongID: state => state.songID,
+  getSongURL: state => state.songURL,
   getPlayState: state => state.playing,
   getSongDetail: state => state.songDetail,
   getSongBarState: state => state.songBarState,
@@ -23,10 +24,11 @@ const actions = {
   changePlayingSong({ state, commit }, id) {
     commit('updateSongID', id)
     commit('showSongBar')
+    commit('beginPlaying')
     api.getSongURL(id)
       .then(res => {
         console.log('songURL', res.data)
-        commit('updateSongURL', res.data.url)
+        commit('updateSongURL', res.data.data[0].url)
       })
 
     api.getSongDetail(id)
@@ -34,6 +36,23 @@ const actions = {
         console.log('songDetail', res.data)
         commit('updateSongDetail', res.data.songs[0])
       })
+  },
+
+  // 下一首
+  nextSong({ dispatch, state, commit, rootState }) {
+    let tracks = rootState.playlistDetail.displayedListInfo.tracks
+    let songID = state.songID
+    for (let i = 0, len = tracks.length; i < len; i++) {
+      if (tracks[i].id === songID) {
+        if (i === len - 1) {
+          // 最后一首
+          dispatch('changePlayingSong', tracks[0].id)
+        } else {
+          dispatch('changePlayingSong', tracks[i + 1].id)
+        }
+        break
+      }
+    }
   }
 }
 
@@ -53,9 +72,18 @@ const mutations = {
     state.songDetail = detail
   },
 
-  // 切换播放状态
   togglePlayState(state) {
     state.playing = !state.playing
+  },
+
+  // 切换为播放状态
+  beginPlaying(state) {
+    state.playing = true
+  },
+
+  // 切换为暂停状态
+  pausePlaying(state) {
+    state.playing = false
   },
 
   // 切换底部播放条显示状态

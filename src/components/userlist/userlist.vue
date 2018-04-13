@@ -1,6 +1,6 @@
 <!-- 用户列表 -->
 <template>
-  <div class="userlist">
+  <div class="userlist" :class="{'songbar-padding':songBarState}">
     <div class="header">
       <span class="back-arrow icon-arrow-left2" @click="hideUserlist"></span>
       <span class="title">{{userlistTitle}}</span>
@@ -44,7 +44,11 @@ export default {
       shouldShowUserDetail: true // 按返回是否还显示用户详情
     }
   },
-
+  computed: {
+    songBarState() {
+      return this.$store.getters.getSongBarState
+    }
+  },
   beforeRouteEnter(to, from, next) {
     let type = to.query.userlistType
     let uid = to.query.uid
@@ -113,7 +117,7 @@ export default {
   left: 0;
   top: 0;
   z-index: 30;
-
+  font-size: 32px;
   .header {
     // 上方头部
     width: 100%;

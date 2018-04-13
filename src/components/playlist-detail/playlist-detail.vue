@@ -99,6 +99,7 @@ export default {
   width: 100%;
   background: #F2F4F5;
   min-height: 100%;
+  font-size: 32px;
   .header {
     width: 100%;
     height: 510px;

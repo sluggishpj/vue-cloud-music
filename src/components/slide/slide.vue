@@ -33,7 +33,7 @@ export default {
           clickable: true
         },
         autoplay: {
-          delay: 2500,
+          delay: 4000,
           disableOnInteraction: false
         }, // 自动播放
         lazy: true, // 图片懒加载

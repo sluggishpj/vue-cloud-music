@@ -11,8 +11,8 @@
       </div>
     </div>
     <span class="icon-list2 play-list"></span>
-    <span class="icon-play2 play-btn"></span>
-    <span class="icon-next2 next-btn"></span>
+    <span :class="[playing?'icon-pause':'icon-play2','play-btn']" @click="togglePlayState"></span>
+    <span class="icon-next2 next-btn" @click="nextSong"></span>
   </div>
 </template>
 <script>
@@ -23,6 +23,19 @@ export default {
     },
     songBarState() {
       return this.$store.getters.getSongBarState
+    },
+    playing() {
+      return this.$store.getters.getPlayState
+    }
+  },
+  methods: {
+    togglePlayState() {
+      // 播放暂停
+      this.$store.commit('togglePlayState')
+    },
+    nextSong() {
+      // 下一首
+      this.$store.dispatch('nextSong')
     }
   }
 }
@@ -61,24 +74,33 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     .name {
+      // 歌名
       color: #333333;
       padding-bottom: 10px;
       width: 100%;
+      font-size: 32px;
       overflow: hidden;
       text-align: left;
       text-overflow: ellipsis;
     }
 
     .artist {
+      // 作者
       color: #888888;
       font-size: 24px;
     }
   }
 
-  .play-list, .play-btn, .next-btn {
-    // 播放列表
+  .play-list,
+  .play-btn,
+  .next-btn {
     flex: 0 0 90px;
     text-align: center;
+  }
+
+  .play-list {
+    // 播放列表
+    font-size: 32px;
   }
 
   .play-btn {

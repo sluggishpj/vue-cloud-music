@@ -4,6 +4,7 @@
     <userinfo></userinfo>
     <playlist-detail></playlist-detail>
     <songbar></songbar>
+    <song></song>
     <keep-alive>
       <router-view/>
     </keep-alive>
@@ -14,13 +15,15 @@ import header from './components/header/header.vue'
 import userinfo from './components/userinfo/userinfo.vue'
 import playlistDetail from './components/playlist-detail/playlist-detail.vue'
 import songbar from './components/songbar/songbar.vue'
+import song from './components/song/song.vue'
 
 export default {
   components: {
     'v-header': header,
     'playlist-detail': playlistDetail,
     userinfo,
-    songbar
+    songbar,
+    song
   },
 
   mounted() {
@@ -29,7 +32,7 @@ export default {
 }
 
 </script>
-<style>
+<style lang="scss">
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -38,4 +41,7 @@ export default {
   min-height: 100vh;
 }
 
+.songbar-padding {
+  padding-bottom: 110px;
+}
 </style>
