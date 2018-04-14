@@ -1,11 +1,11 @@
 <!-- 歌曲列表 -->
 <template>
-  <div class="songlist" :class="{'songbar-padding':songBarState}">
+  <div class="songlist" :class="{'songbar-padding':songBarShow}">
     <div class="header">
       <span class="icon-play2 play-btn"></span>
       <span class="title">播放全部<span class="count">(共{{listInfo.trackCount}}首)</span></span>
     </div>
-    <ul class="list">
+    <ul class="song-list">
       <li class="list-item" v-for="(item, idx) in listInfo.tracks" :key="idx" @click="playSong(item.id)">
         <span class="serial-num" :class="{'icon-volume-medium':item.id===playingSongID}">{{item.id===playingSongID?'':(idx+1)}}</span>
         <div class="item-detail">
@@ -25,8 +25,8 @@ export default {
     playingSongID() {
       return this.$store.getters.getSongID
     },
-    songBarState() {
-      return this.$store.getters.getSongBarState
+    songBarShow() {
+      return this.$store.getters.getSongBarShow
     }
   },
   props: {
@@ -34,6 +34,7 @@ export default {
   },
   methods: {
     playSong(id) {
+      this.$store.commit('changePlayingList')
       this.$store.dispatch('changePlayingSong', id)
     }
   }

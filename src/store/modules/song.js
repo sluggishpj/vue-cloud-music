@@ -6,8 +6,8 @@ const state = {
   songURL: '', // 当前播放的歌的URL
   songDetail: '', // 当前播放的歌的详细信息
   playing: false, // 当前是否正在播放
-  songBarState: false, // 底部播放控制条
-  playInterfaceState: false // 显示播放界面，一个盘子在转，含歌词
+  songBarShow: false, // 底部是否显示播放控制条
+  playInterfaceShow: false // 显示播放界面，一个盘子在转，含歌词
 }
 
 const getters = {
@@ -15,8 +15,8 @@ const getters = {
   getSongURL: state => state.songURL,
   getPlayState: state => state.playing,
   getSongDetail: state => state.songDetail,
-  getSongBarState: state => state.songBarState,
-  getInterfaceState: state => state.playInterfaceState
+  getSongBarShow: state => state.songBarShow,
+  getPlayInterfaceShow: state => state.playInterfaceShow
 }
 
 const actions = {
@@ -40,7 +40,7 @@ const actions = {
 
   // 下一首
   nextSong({ dispatch, state, commit, rootState }) {
-    let tracks = rootState.playlistDetail.displayedListInfo.tracks
+    let tracks = rootState.playlist.displayedListInfo.tracks
     let songID = state.songID
     for (let i = 0, len = tracks.length; i < len; i++) {
       if (tracks[i].id === songID) {
@@ -88,16 +88,16 @@ const mutations = {
 
   // 切换底部播放条显示状态
   showSongBar(state) {
-    state.songBarState = true
+    state.songBarShow = true
     console.log('show songbar')
   },
   hideSongBar(state) {
-    state.songBarState = false
+    state.songBarShow = false
     console.log('hide songbar')
   },
   // 切换播放界面显示状态
   togglePlayInterface(state) {
-    state.playInterfaceState = !state.playInterfaceState
+    state.playInterfaceShow = !state.playInterfaceShow
   }
 }
 

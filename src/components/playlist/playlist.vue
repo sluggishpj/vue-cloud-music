@@ -1,164 +1,121 @@
-<!-- 歌单列表 -->
+<!-- 播放列表 -->
 <template>
-  <div class="play-list" v-if="playlist && playlist.length && profile && playlistShow">
-    <div class="self-playlist">
-      <span class="title">歌单({{profile.playlistCount}})</span>
-      <ul>
-        <li class="list-item">
-          <span class="icon">
-            <img src="../../assets/rank.png">
-          </span>
-          <span class="item-detail">
-            <span class="item-name">{{author}}听歌排行</span>
-          <span class="item-count">累计听歌{{userInfo.listenSongs}}首</span>
-          </span>
-        </li>
-        <li v-for="(item, index) in selfPlaylist" :key="index" @click="showPlaylistDetail(item.id)" class="list-item">
-          <span class="icon">
-            <img :src="item.coverImgUrl">
-          </span>
-          <span class="item-detail">
-            <span class="item-name">{{item.name}}</span>
-          <span class="item-count">{{item.trackCount}}首 播放{{item.playCount}}次</span>
-          </span>
-        </li>
-      </ul>
-    </div>
-    <div class="other-playlist" v-if="subscribedCount">
-      <span class="title">收藏的歌单({{subscribedCount}})</span>
-      <ul>
-        <li v-for="(item, index) in otherPlaylist" :key="index" @click="showPlaylistDetail(item.id)" class="list-item">
-          <span class="icon">
-            <img :src="item.coverImgUrl">
-          </span>
-          <span class="item-detail">
-            <span class="item-name">{{item.name}}</span>
-          <span class="item-count">{{item.trackCount}}首 by {{item.creator.nickname}}</span>
-          </span>
-        </li>
-      </ul>
+  <div class="playlist" v-if="playlistShow">
+    <scroll-lock class="lock-div">
+      <div class="bg-cover" @click="hidePlaylist"></div>
+    </scroll-lock>
+    <div class="list-info">
+      <div class="header">
+        <span>播放列表</span>
+        <span class="clear">清空</span>
+      </div>
+      <scroll-lock class="lock-div play-list">
+        <ul class="list">
+          <li class="list-item" v-for="(item, idx) in listInfo.tracks" :key="idx" @click="playSong(item.id)">
+            <span class="serial-num" :class="{'icon-volume-medium':item.id===playingSongID}" :data-num=idx>{{item.id===playingSongID?'':''}}</span>
+            <span class="name">{{item.name}}</span>
+            <span class="artist" v-for="(artist, idx) in item.artists" :key="idx"> - {{artist.name}} </span>
+          </li>
+        </ul>
+      </scroll-lock>
     </div>
   </div>
 </template>
 <script>
-import api from '../../fetch/api.js'
-
 export default {
-  props: {
-    uid: '',
-    playlistShow: false
-  },
-
-  data() {
-    return {
-      playlist: []
-    }
-  },
   computed: {
-    userInfo() {
-      return this.$store.getters.getDisplayedUserInfo
-    },
-    profile() {
-      return this.userInfo.profile
-    },
-    selfPlaylist() { // 自己创建的歌单
-      return this.playlist.filter(item => {
-        return item.userId === this.uid
-      })
-    },
-    otherPlaylist() { // 收藏的歌单
-      return this.playlist.filter(item => {
-        return item.userId !== this.uid
-      })
-    },
-    author() { // 更新当前作者
-      if (this.uid !== this.$store.getters.getOwnUserID.toString()) {
-        return this.profile.nickname
-      } else {
-        return '我的'
+    playlistShow() {
+      if (this.$store.getters.getPlaylistShow === true) {
+        this.$nextTick(() => {
+          let playList = document.getElementsByClassName('lock-div play-list')[0]
+          if (playList) {
+            let targetIndex = playList.getElementsByClassName('icon-volume-medium')[0].getAttribute('data-num')
+            let docHeight = document.documentElement.clientHeight
+            playList.scrollTop = (targetIndex - 3) * 98 / 1334 * docHeight
+            console.log('scrollTop', playList.scrollTop)
+          }
+        })
       }
+      return this.$store.getters.getPlaylistShow
     },
-    subscribedCount() {
-      return this.otherPlaylist.length
-    }
-  },
-  watch: {
-    uid() {
-      // 获取用户歌单列表
-      api.getUserPlaylist(this.uid)
-        .then(res => {
-          console.log('user playlist', res.data.playlist)
-          this.playlist = res.data.playlist
-        })
-        .catch(err => {
-          console.log(err)
-        })
+    playingSongID() {
+      return this.$store.getters.getSongID
+    },
+    listInfo() {
+      return this.$store.getters.getDisplayedListInfo
     }
   },
   methods: {
-    showPlaylistDetail(id) { // 显示歌单详情
-      this.$store.commit('toggleUserDetail')
-      this.$store.dispatch('changeDisplayedList', id)
+    playSong(id) {
+      this.$store.commit('changePlayingList')
+      this.$store.dispatch('changePlayingSong', id)
+    },
+    hidePlaylist() {
+      this.$store.commit('togglePlaylist')
     }
   }
 }
 
 </script>
 <style lang="scss" scoped>
-.play-list {
-  position: relative;
+.bg-cover {
+  position: fixed;
+  left: 0;
+  top: 0;
   width: 100%;
-  background: #F2F4F5;
-  .title {
-    // 歌单，收藏的歌单
-    display: block;
-    font-size: 28px;
-    color: #888888;
-    height: 54px;
-    line-height: 54px;
-    text-align: left;
-    padding-left: 20px;
-    background: #ECEEEF;
-  }
-  .list-item {
-    // 每一项歌单
-    display: block;
-    position: relative;
-    height: 128px;
-    .icon {
-      // 每一项的图标
-      display: inline-block;
-      width: 108px;
-      height: 108px;
-      position: absolute;
-      left: 20px;
-      top: 10px;
-      img {
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, .6);
+  height: 100vh;
+  z-index: 65;
+  background: rgba(0, 0, 0, .4);
+}
+
+.list-info {
+  position: fixed;
+  left: 0;
+  top: 492px;
+  bottom: 0;
+  right: 0;
+  z-index: 75;
+  overflow: scroll;
+  background: #FBFBFB;
+  .header {
+    height: 112px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    span {
+      color: #343434;
+      flex: 1;
+      &.clear {
+        color: #898989;
       }
     }
+    border-bottom: 1px solid #E3E3E3;
+  }
 
-    .item-detail {
-      // 每一项右边的文字
-      text-align: left;
-      display: block;
-      padding-left: 150px;
-      .item-name {
-        // 歌单名
-        display: block;
-        font-size: 32px;
-        padding: 30px 0px 10px;
-      }
-      .item-count {
-        // 歌曲数，播放数
-        color: #888888;
-        font-size: 20px;
-        padding: 14px 0px 18px;
-        display: block;
-        border-bottom: 1px solid #DADCDD;
-      }
+  .lock-div {
+    width: 100%;
+    height: 726px;
+    position: fixed;
+    bottom: 0;
+    overflow: scroll;
+  }
+
+  .list-item {
+    text-align: left;
+    height: 96px;
+    line-height: 96px;
+    margin-left: 20px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    border-bottom: 1px solid #E3E3E3;
+    .name {
+      color: #333333;
+      font-size: 32px;
+    }
+    .artist {
+      color: #898989;
+      font-size: 24px;
     }
   }
 }

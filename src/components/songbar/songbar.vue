@@ -1,18 +1,20 @@
 <!-- 底部歌曲状态条 -->
 <template>
-  <div class="songbar" v-if="songDetail.al && songBarState">
-    <div class="avatar">
-      <img :src="songDetail.al.picUrl">
-    </div>
-    <div class="name-artist">
-      <div class="name">{{songDetail.name}}</div>
-      <div class="artist">
-        <span v-for="(ar,idx) in songDetail.ar" :key="idx">{{ar.name}} </span>
+  <div class="songbar-container" v-if="songDetail.al && songBarShow">
+    <div class="songbar">
+      <div class="avatar">
+        <img :src="songDetail.al.picUrl">
       </div>
+      <div class="name-artist">
+        <div class="name">{{songDetail.name}}</div>
+        <div class="artist">
+          <span v-for="(ar,idx) in songDetail.ar" :key="idx">{{ar.name}} </span>
+        </div>
+      </div>
+      <span class="icon-list2 playlist-btn" @click="showPlaylist"></span>
+      <span :class="[playing?'icon-pause':'icon-play2','play-btn']" @click="togglePlayState"></span>
+      <span class="icon-next2 next-btn" @click="nextSong"></span>
     </div>
-    <span class="icon-list2 play-list"></span>
-    <span :class="[playing?'icon-pause':'icon-play2','play-btn']" @click="togglePlayState"></span>
-    <span class="icon-next2 next-btn" @click="nextSong"></span>
   </div>
 </template>
 <script>
@@ -21,8 +23,8 @@ export default {
     songDetail() {
       return this.$store.getters.getSongDetail
     },
-    songBarState() {
-      return this.$store.getters.getSongBarState
+    songBarShow() {
+      return this.$store.getters.getSongBarShow
     },
     playing() {
       return this.$store.getters.getPlayState
@@ -36,6 +38,10 @@ export default {
     nextSong() {
       // 下一首
       this.$store.dispatch('nextSong')
+    },
+    showPlaylist() {
+      // 显示播放列表
+      this.$store.commit('togglePlaylist')
     }
   }
 }
@@ -91,14 +97,14 @@ export default {
     }
   }
 
-  .play-list,
+  .playlist-btn,
   .play-btn,
   .next-btn {
     flex: 0 0 90px;
     text-align: center;
   }
 
-  .play-list {
+  .playlist-btn {
     // 播放列表
     font-size: 32px;
   }
@@ -115,6 +121,17 @@ export default {
     padding-right: 10px;
     transform: scaleX(1.5);
   }
+}
+
+.bg-cover {
+  // 显示播放列表时背面的黑色半透明遮罩
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, .4);
+  z-index: 40;
+  left: 0;
+  top: 0;
 }
 
 </style>

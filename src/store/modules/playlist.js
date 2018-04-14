@@ -6,7 +6,8 @@ const state = {
   displayedListInfo: {}, // 当前显示的歌单列表详情
   playingListID: '', // 当前播放的歌单列表ID
   displayedListID: '', // 当前显示的歌单列表ID
-  showPlaylistDetail: false // 是否显示歌单详情
+  playlistDetailShow: false, // 是否显示歌单详情
+  playlistShow: false // 是否显示播放列表
 }
 
 const getters = {
@@ -14,7 +15,8 @@ const getters = {
   getDisplayedListInfo: state => state.displayedListInfo,
   getPlayigListID: state => state.playingListID,
   getDisplayedListID: state => state.displayedListID,
-  showPlaylistDetail: state => state.showPlaylistDetail
+  getPlaylistDetailShow: state => state.playlistDetailShow,
+  getPlaylistShow: state => state.playlistShow
 }
 
 const actions = {
@@ -47,14 +49,14 @@ const actions = {
 
 const mutations = {
   // 更改正在播放的歌单列表，因为切换只可能是当前显示的歌单列表，不需要再发送请求
-  changePlayingList(state, id) {
-    if (id === state.playingListID) {
+  changePlayingList(state) {
+    if (state.playingListID === state.displayedListID) {
       // 还是当前播放的歌单列表
       return
     }
 
     // 把当前播放列表切换为当前显示的歌单列表
-    state.playingListID = id
+    state.playingListID = state.displayedListID
     state.playingListInfo = state.displayedListInfo
   },
 
@@ -70,7 +72,12 @@ const mutations = {
 
   // 显示或关闭歌单详情
   togglePlaylistDetail(state) {
-    state.showPlaylistDetail = !state.showPlaylistDetail
+    state.playlistDetailShow = !state.playlistDetailShow
+  },
+
+  // 显示或关闭播放列表
+  togglePlaylist(state) {
+    state.playlistShow = !state.playlistShow
   }
 }
 

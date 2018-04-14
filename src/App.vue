@@ -2,9 +2,10 @@
   <div id="app">
     <v-header></v-header>
     <userinfo></userinfo>
-    <playlist-detail></playlist-detail>
+    <song-menu-detail></song-menu-detail>
     <songbar></songbar>
     <song></song>
+    <playlist></playlist>
     <keep-alive>
       <router-view/>
     </keep-alive>
@@ -13,17 +14,19 @@
 <script>
 import header from './components/header/header.vue'
 import userinfo from './components/userinfo/userinfo.vue'
-import playlistDetail from './components/playlist-detail/playlist-detail.vue'
+import songMenuDetail from './components/song-menu-detail/song-menu-detail.vue'
 import songbar from './components/songbar/songbar.vue'
 import song from './components/song/song.vue'
+import playlist from './components/playlist/playlist.vue'
 
 export default {
   components: {
     'v-header': header,
-    'playlist-detail': playlistDetail,
+    'song-menu-detail': songMenuDetail,
     userinfo,
     songbar,
-    song
+    song,
+    playlist
   },
 
   mounted() {

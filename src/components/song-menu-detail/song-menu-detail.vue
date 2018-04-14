@@ -1,5 +1,5 @@
 <template>
-  <div class="playlist-detail" v-if="showPlaylistDetail && listInfo">
+  <div class="playlist-detail" v-if="playlistDetailShow && listInfo">
     <div class="header">
       <img :src="listInfo.coverImgUrl" class="backdrop">
       <div class="fixed-head">
@@ -55,8 +55,8 @@ export default {
   },
 
   computed: {
-    showPlaylistDetail() {
-      return this.$store.getters.showPlaylistDetail
+    playlistDetailShow() {
+      return this.$store.getters.getPlaylistDetailShow
     },
     listInfo() {
       return this.$store.getters.getDisplayedListInfo
@@ -229,7 +229,7 @@ export default {
     left: 0;
     top: 0;
     width: 100%;
-    background: #FFF;
+    background: #F2F4F5;
     height: 100vh;
     z-index: 50;
     overflow: scroll;

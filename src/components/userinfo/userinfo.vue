@@ -1,41 +1,43 @@
 <!-- 用户详情页 -->
 <template>
   <transition name="fade">
-    <div class="user-info" v-show="isShowUserDetail" :class="{'songbar-padding':songBarState}">
-      <div class="back-arrow"><span @click="toggleUserDetail" class="icon-arrow-left2"></span></div>
-      <div class="header" :style="headerBg" v-if="!!profile">
-        <div class="avatar">
-          <img :src="profile.avatarUrl">
+    <scroll-lock class="scroll-lock-div" v-show="isShowUserDetail">
+      <div class="user-info" :class="{'songbar-padding':songBarShow}">
+        <div class="back-arrow"><span @click="toggleUserDetail" class="icon-arrow-left2"></span></div>
+        <div class="header" :style="headerBg" v-if="!!profile">
+          <div class="avatar">
+            <img :src="profile.avatarUrl">
+          </div>
+          <div class="nick-level">
+            <span class="nickname">{{profile.nickname}}</span>
+            <span class="gender" v-show="profile.gender">{{profile.gender === 1?'♂':'♀'}}</span>
+            <span class="level">Lv.{{userInfo.level}}</span>
+          </div>
+          <!-- 动态关注粉丝3按钮 -->
+          <div class="tab" v-if="uid">
+            <router-link @click.native="toggleUserDetail" to="/userevent" class="tab-item">
+              <span class="title">动态</span><span>{{profile.eventCount}}</span>
+            </router-link>
+            <router-link @click.native="toggleUserDetail" :to="{path: '/userlist', query:{uid:uid, userlistType:'follows'}}" class="tab-item">
+              <span class="title">关注</span><span>{{profile.follows}}</span>
+            </router-link>
+            <router-link @click.native="toggleUserDetail" :to="{path: '/userlist', query:{uid:uid, userlistType:'followeds'}}" class="tab-item">
+              <span class="title">粉丝</span><span>{{profile.followeds}}</span>
+            </router-link>
+          </div>
         </div>
-        <div class="nick-level">
-          <span class="nickname">{{profile.nickname}}</span>
-          <span class="gender" v-show="profile.gender">{{profile.gender === 1?'♂':'♀'}}</span>
-          <span class="level">Lv.{{userInfo.level}}</span>
-        </div>
-        <!-- 动态关注粉丝3按钮 -->
-        <div class="tab" v-if="uid">
-          <router-link @click.native="toggleUserDetail" to="/userevent" class="tab-item">
-            <span class="title">动态</span><span>{{profile.eventCount}}</span>
-          </router-link>
-          <router-link @click.native="toggleUserDetail" :to="{path: '/userlist', query:{uid:uid, userlistType:'follows'}}" class="tab-item">
-            <span class="title">关注</span><span>{{profile.follows}}</span>
-          </router-link>
-          <router-link @click.native="toggleUserDetail" :to="{path: '/userlist', query:{uid:uid, userlistType:'followeds'}}" class="tab-item">
-            <span class="title">粉丝</span><span>{{profile.followeds}}</span>
-          </router-link>
-        </div>
+        <!-- 歌单列表 -->
+        <song-menu-list :uid="uid" :playlistShow="playlistShow"></song-menu-list>
       </div>
-      <!-- 歌单列表 -->
-      <playlist :uid="uid" :playlistShow="playlistShow"></playlist>
-    </div>
+    </scroll-lock>
   </transition>
 </template>
 <script>
-import playlist from '../playlist/playlist.vue'
+import songMenuList from '../song-menu-list/song-menu-list.vue'
 
 export default {
   components: {
-    playlist
+    songMenuList
   },
   data() {
     return {
@@ -62,8 +64,8 @@ export default {
     uid() {
       return this.$store.getters.getDisplayedUserID
     },
-    songBarState() {
-      return this.$store.getters.getSongBarState
+    songBarShow() {
+      return this.$store.getters.getSongBarShow
     }
   },
 
@@ -76,13 +78,21 @@ export default {
 
 </script>
 <style lang="scss" scoped>
+.scroll-lock-div {
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  z-index: 42;
+  overflow: scroll;
+}
 .user-info {
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
-  z-index: 40;
-  background: rgba(0, 0, 0, .1);
+  // background: rgba(0, 0, 0, .1);
   .back-arrow {
     // 返回箭头
     position: fixed;

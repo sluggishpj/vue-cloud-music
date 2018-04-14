@@ -1,25 +1,27 @@
 <!-- 用户列表 -->
 <template>
-  <div class="userlist" :class="{'songbar-padding':songBarState}">
-    <div class="header">
-      <span class="back-arrow icon-arrow-left2" @click="hideUserlist"></span>
-      <span class="title">{{userlistTitle}}</span>
-    </div>
-    <ul class="list">
-      <li v-for="(item, index) in userlist" :key="index" @click="showUserInfo(item.userId)" class="list-item">
-        <span class="icon">
+  <scroll-lock class="scroll-lock-div">
+    <div class="userlist" :class="{'songbar-padding':songBarShow}">
+      <div class="header">
+        <span class="back-arrow icon-arrow-left2" @click="hideUserlist"></span>
+        <span class="title">{{userlistTitle}}</span>
+      </div>
+      <ul class="list">
+        <li v-for="(item, index) in userlist" :key="index" @click="showUserInfo(item.userId)" class="list-item">
+          <span class="icon">
             <img :src="item.avatarUrl">
           </span>
-        <div class="item-detail">
-          <div class="nick-gender">
-            <span class="nickname">{{item.nickname}}</span>
-            <span class="gender" v-show="item.gender" :class="{boy:item.gender===1,girl:item.gender===2}">{{item.gender === 1?'♂':'♀'}}</span>
+          <div class="item-detail">
+            <div class="nick-gender">
+              <span class="nickname">{{item.nickname}}</span>
+              <span class="gender" v-show="item.gender" :class="{boy:item.gender===1,girl:item.gender===2}">{{item.gender === 1?'♂':'♀'}}</span>
+            </div>
+            <div class="signature" v-if="!!item.signature">{{item.signature}}</div>
           </div>
-          <div class="signature" v-if="!!item.signature">{{item.signature}}</div>
-        </div>
-      </li>
-    </ul>
-  </div>
+        </li>
+      </ul>
+    </div>
+  </scroll-lock>
 </template>
 <script>
 import api from '../../fetch/api.js'
@@ -45,8 +47,8 @@ export default {
     }
   },
   computed: {
-    songBarState() {
-      return this.$store.getters.getSongBarState
+    songBarShow() {
+      return this.$store.getters.getSongBarShow
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -106,17 +108,25 @@ export default {
 
 </script>
 <style lang="scss" scoped>
+.scroll-lock-div {
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  overflow: scroll;
+  z-index: 40;
+  background: #F2F4F5;
+}
+
 .userlist {
   width: 100%;
-  min-height: 100vh;
   overflow: hidden;
   left: 0;
   top: 0;
-  background: #F2F4F5;
   position: absolute;
   left: 0;
   top: 0;
-  z-index: 30;
   font-size: 32px;
   .header {
     // 上方头部
@@ -129,7 +139,7 @@ export default {
     top: 0;
     color: #464646;
     z-index: 10;
-    box-shadow: 0 1px 1px 0px #ccc;
+    border-bottom: 1px solid #DBDDDE;
     .back-arrow {
       // 返回箭头
       position: absolute;
