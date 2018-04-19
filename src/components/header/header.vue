@@ -32,9 +32,6 @@
       </div>
     </div>
     <sidebar :sidebar-show="sidebarShow" @hideSidebar="hideSidebar" :ownID="ownID"></sidebar>
-    <transition name="fade">
-      <div class="bg-cover" @click="hideSidebar" v-show="sidebarShow"></div>
-    </transition>
   </div>
 </template>
 <script>
@@ -53,6 +50,7 @@ export default {
   methods: {
     // 隐藏侧边栏
     hideSidebar() {
+      console.log('hideSidebar')
       this.sidebarShow = false
     }
   }
@@ -103,39 +101,6 @@ $header-height: 92px;
 .search-menu {
   flex: 0 1 100px;
   justify-content: center;
-}
-
-// 背面的遮罩
-.bg-cover {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 65;
-  background: rgba(0, 0, 0, .6);
-}
-
-.fade-enter,
-.fade-leave-to {
-  background: rgba(0, 0, 0, 0);
-}
-
-.fade-enter-active {
-  animation: fade-in .3s linear;
-}
-
-.fade-leave-active {
-  animation: fade-in .3s reverse;
-}
-
-@keyframes fade-in {
-  0% {
-    background: rgba(0, 0, 0, 0);
-  }
-  100% {
-    background: rgba(0, 0, 0, .4);
-  }
 }
 
 </style>

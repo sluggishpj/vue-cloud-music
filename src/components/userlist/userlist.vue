@@ -3,7 +3,7 @@
   <scroll-lock class="scroll-lock-div">
     <div class="userlist" :class="{'songbar-padding':songBarShow}">
       <div class="header">
-        <span class="back-arrow icon-arrow-left2" @click="hideUserlist"></span>
+        <span class="back-arrow icon-arrow-left2" @click="back"></span>
         <span class="title">{{userlistTitle}}</span>
       </div>
       <ul class="list">
@@ -26,24 +26,20 @@
 <script>
 import api from '../../fetch/api.js'
 export default {
-  methods: {
-    hideUserlist() {
-      // 箭头回退上一路由
-      this.$router.go(-1)
-      if (this.shouldShowUserDetail) {
-        this.$store.commit('toggleUserDetail') // 显示用户详情
-      }
-    },
-    showUserInfo(uid) {
-      this.shouldShowUserDetail = false
-      this.$store.dispatch('changeDisplayedUser', uid)
-    }
-  },
   data() {
     return {
       userlist: [],
-      userlistTitle: '',
-      shouldShowUserDetail: true // 按返回是否还显示用户详情
+      userlistTitle: ''
+    }
+  },
+  methods: {
+    back() {
+      // 箭头回退上一路由
+      this.$router.go(-1)
+    },
+    showUserInfo(uid) {
+      this.$router.push({ name: 'userinfo' })
+      this.$store.dispatch('changeDisplayedUser', uid)
     }
   },
   computed: {
@@ -52,8 +48,11 @@ export default {
     }
   },
   beforeRouteEnter(to, from, next) {
-    let type = to.query.userlistType
-    let uid = to.query.uid
+    console.log('window.history', window.history)
+    console.log('beforeRouteEnter')
+    console.log('from', from)
+    let type = to.params.userlistType
+    let uid = to.params.uid
     if (type === 'follows') {
       // 关注
       api.getFollows(uid).then(res => {
@@ -61,7 +60,6 @@ export default {
         next(vm => {
           vm.userlist = res.data.follow
           vm.userlistTitle = '关注'
-          vm.shouldShowUserDetail = true
         })
       }).catch(err => {
         console.log(err)
@@ -77,31 +75,8 @@ export default {
       }).catch(err => {
         console.log(err)
       })
-    }
-  },
-
-  beforeRouteUpdate(to, from, next) {
-    let type = to.query.userlistType
-    let uid = to.query.uid
-    this.shouldShowUserDetail = true
-    if (type === 'follows') {
-      // 关注
-      api.getFollows(uid).then(res => {
-        console.log('getFollows', res)
-        this.userlist = res.data.follow
-        this.userlistTitle = '关注'
-      }).catch(err => {
-        console.log(err)
-      })
-    } else if (type === 'followeds') {
-      // 粉丝
-      api.getFolloweds(uid).then(res => {
-        console.log('getFolloweds', res)
-        this.userlist = res.data.followeds
-        this.userlistTitle = '粉丝'
-      }).catch(err => {
-        console.log(err)
-      })
+    } else {
+      next()
     }
   }
 }

@@ -1,7 +1,7 @@
 <!-- 底部歌曲状态条 -->
 <template>
   <div class="songbar-container" v-if="songDetail.al && songBarShow">
-    <div class="songbar">
+    <div class="songbar" @click="showPlayInterface">
       <div class="avatar">
         <img :src="songDetail.al.picUrl">
       </div>
@@ -11,9 +11,9 @@
           <span v-for="(ar,idx) in songDetail.ar" :key="idx">{{ar.name}} </span>
         </div>
       </div>
-      <span class="icon-list2 playlist-btn" @click="showPlaylist"></span>
-      <span :class="[playing?'icon-pause':'icon-play2','play-btn']" @click="togglePlayState"></span>
-      <span class="icon-next2 next-btn" @click="nextSong"></span>
+      <span class="icon-list2 playlist-btn" @click.stop="showPlaylist"></span>
+      <span :class="[playing?'icon-pause':'icon-play2','play-btn']" @click.stop="togglePlayState"></span>
+      <span class="icon-next2 next-btn" @click.stop="nextSong"></span>
     </div>
   </div>
 </template>
@@ -42,6 +42,10 @@ export default {
     showPlaylist() {
       // 显示播放列表
       this.$store.commit('togglePlaylist')
+    },
+    showPlayInterface() {
+      // 显示转盘界面
+      this.$store.commit('togglePlayInterface')
     }
   }
 }

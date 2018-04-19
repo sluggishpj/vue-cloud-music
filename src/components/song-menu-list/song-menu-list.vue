@@ -1,6 +1,6 @@
 <!-- 歌单列表 -->
 <template>
-  <div class="play-menu-list" v-if="playlist && playlist.length && profile && playlistShow">
+  <div class="song-menu-list" v-if="playlist && playlist.length && profile">
     <div class="self-playlist">
       <span class="title">歌单({{profile.playlistCount}})</span>
       <ul>
@@ -45,10 +45,8 @@ import api from '../../fetch/api.js'
 
 export default {
   props: {
-    uid: '',
-    playlistShow: false
+    uid: ''
   },
-
   data() {
     return {
       playlist: []
@@ -82,9 +80,22 @@ export default {
       return this.otherPlaylist.length
     }
   },
+  created() {
+    // 获取用户歌单列表
+    this.getSongMenuDetail(this.uid)
+  },
   watch: {
     uid() {
       // 获取用户歌单列表
+      this.getSongMenuDetail(this.uid)
+    }
+  },
+  methods: {
+    showPlaylistDetail(id) { // 显示歌单详情
+      this.$router.push('song-menu-detail')
+      this.$store.dispatch('changeDisplayedList', id)
+    },
+    getSongMenuDetail(id) {
       api.getUserPlaylist(this.uid)
         .then(res => {
           console.log('user playlist', res.data.playlist)
@@ -94,18 +105,12 @@ export default {
           console.log(err)
         })
     }
-  },
-  methods: {
-    showPlaylistDetail(id) { // 显示歌单详情
-      this.$store.commit('toggleUserDetail')
-      this.$store.dispatch('changeDisplayedList', id)
-    }
   }
 }
 
 </script>
 <style lang="scss" scoped>
-.play-menu-list {
+.song-menu-list {
   position: relative;
   width: 100%;
   background: #F2F4F5;

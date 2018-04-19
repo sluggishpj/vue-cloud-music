@@ -7,7 +7,7 @@ const state = {
   displayedUserInfo: {}, // 被显示的用户信息
   ownUserID: '', // 当前用户的ID
   displayedUserID: '', // 被显示的用户的ID
-  showUserDetail: false // 是否显示某用户详情
+  userDetailShow: false // 是否显示某用户详情
 }
 
 const getters = {
@@ -15,7 +15,7 @@ const getters = {
   getDisplayedUserInfo: state => state.displayedUserInfo,
   getOwnUserID: state => state.ownUserID,
   getDisplayedUserID: state => state.displayedUserID,
-  isShowUserDetail: state => state.showUserDetail
+  getUserDetailShow: state => state.userDetailShow
 }
 
 const actions = {
@@ -43,7 +43,7 @@ const actions = {
 
   // 更改显示的用户
   changeDisplayedUser({ state, commit }, id) {
-    commit('toggleUserDetail')
+    // commit('toggleUserDetail')
     if (id === state.displayedUserID) {
       // id一致，不用修改
       return
@@ -90,7 +90,7 @@ const mutations = {
 
   // 显示或关闭用户详情
   toggleUserDetail(state) {
-    state.showUserDetail = !state.showUserDetail
+    state.userDetailShow = !state.userDetailShow
   }
 }
 

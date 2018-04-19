@@ -6,7 +6,7 @@
       <input v-model.trim="searchWord" class="search-word" ref="searchWord">
       <span class="clear-all" @click="clearAll">×</span>
     </div>
-    <ul class="list">
+    <ul class="list" :class="{'songbar-padding':songBarShow}">
       <li class="list-item" v-for="(item, idx) in searchSongList" :key="idx" @click="playSong(item.id)">
         <span class="serial-num" :class="{'icon-volume-medium':item.id===playingSongID}">{{item.id===playingSongID?'':(idx+1)}}</span>
         <div class="item-detail">
@@ -38,6 +38,7 @@ export default {
   },
   methods: {
     hideSearchList() {
+      // 隐藏搜索
       this.$emit('hideSearchList')
     },
     clearAll() {
@@ -65,6 +66,9 @@ export default {
             item.album.name.toLowerCase().indexOf(searchWord) !== -1
         })
       }
+    },
+    songBarShow() {
+      return this.$store.getters.getSongBarShow
     }
   },
   mounted() {

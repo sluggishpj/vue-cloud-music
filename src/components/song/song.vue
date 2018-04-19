@@ -1,7 +1,7 @@
 <!-- 歌曲组件控制播放，暂停，调进度 -->
 <template>
   <div class="song" v-show="false">
-    <audio controls autoplay type="audio/mp3" :src="songURL" ref="music" @ended="ended">
+    <audio controls autoplay type="audio/mp3" :src="songURL" ref="music" @ended="ended" :loop="loop">
     </audio>
   </div>
 </template>
@@ -13,11 +13,19 @@ export default {
     },
     playing() {
       return this.$store.getters.getPlayState
+    },
+    playMode() {
+      return this.$store.getters.getPlayMode
+    },
+    loop() {
+      // 是否单曲循环
+      return this.playMode === 2
     }
   },
 
   watch: {
     playing() {
+      // 播放或暂停
       if (this.playing === true) {
         let playPromise = this.$refs.music.play()
         if (playPromise !== undefined) {
@@ -37,7 +45,13 @@ export default {
     ended() {
       // 播放结束
       console.log('歌结束了')
-      this.$store.dispatch('nextSong')
+      if (this.playMode === 0) {
+        // 列表循环
+        this.$store.dispatch('nextSong')
+      } else if (this.playMode === 1) {
+        // 随机播放
+        this.$store.dispatch('randomSong')
+      }
     }
   }
 }

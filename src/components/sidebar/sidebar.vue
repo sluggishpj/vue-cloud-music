@@ -1,24 +1,29 @@
 <!-- 侧边栏 -->
 <template>
-  <transition name="slide">
-    <div class="sidebar" v-show="sidebarShow">
-      <div class="header" v-if="!!profile" :style="headerBg">
-        <div class="avatar">
-          <img :src="profile.avatarUrl" @click="changeDisplayedUser(profile.userId)">
+  <div class="sidebar-container">
+    <transition name="slide">
+      <div class="sidebar" v-show="sidebarShow">
+        <div class="header" v-if="!!profile" :style="headerBg">
+          <div class="avatar">
+            <img :src="profile.avatarUrl" @click="changeDisplayedUser(profile.userId)">
+          </div>
+          <div class="nick-level">
+            <span class="nickname">{{profile.nickname}}</span>
+            <span class="level ignore">Lv.{{ownUserInfo.level}}</span>
+          </div>
+          <span class="sign-in">签到</span>
         </div>
-        <div class="nick-level">
-          <span class="nickname">{{profile.nickname}}</span>
-          <span class="level ignore">Lv.{{ownUserInfo.level}}</span>
+        <div class="memulist">
+          <ul>
+            <li><span class="icon-cloud-download"></span>我的音乐云盘</li>
+          </ul>
         </div>
-        <span class="sign-in">签到</span>
       </div>
-      <div class="memulist">
-        <ul>
-          <li><span class="icon-cloud-download"></span>我的音乐云盘</li>
-        </ul>
-      </div>
-    </div>
-  </transition>
+    </transition>
+    <transition name="fade">
+      <div class="bg-cover" @click="hideSidebar" v-show="sidebarShow"></div>
+    </transition>
+  </div>
 </template>
 <script>
 export default {
@@ -43,8 +48,12 @@ export default {
   methods: {
     // 显示用户详情
     changeDisplayedUser(id) {
-      this.$emit('hideSidebar') // 通知父组件隐藏本组件
+      this.hideSidebar()
       this.$store.dispatch('changeDisplayedUser', id)
+      this.$router.push({ name: 'userinfo' })
+    },
+    hideSidebar() {
+      this.$emit('hideSidebar') // 通知父组件隐藏本组件
     }
   }
 }
@@ -135,6 +144,39 @@ export default {
       color: white;
       padding-right: 30px;
     }
+  }
+}
+
+// 背面的遮罩
+.bg-cover {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 65;
+  background: rgba(0, 0, 0, .6);
+}
+
+.fade-enter,
+.fade-leave-to {
+  background: rgba(0, 0, 0, 0);
+}
+
+.fade-enter-active {
+  animation: fade-in .3s linear;
+}
+
+.fade-leave-active {
+  animation: fade-in .3s reverse;
+}
+
+@keyframes fade-in {
+  0% {
+    background: rgba(0, 0, 0, 0);
+  }
+  100% {
+    background: rgba(0, 0, 0, .4);
   }
 }
 

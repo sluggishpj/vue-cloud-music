@@ -7,7 +7,8 @@ const state = {
   songDetail: '', // 当前播放的歌的详细信息
   playing: false, // 当前是否正在播放
   songBarShow: false, // 底部是否显示播放控制条
-  playInterfaceShow: false // 显示播放界面，一个盘子在转，含歌词
+  playInterfaceShow: false, // 显示播放界面，一个盘子在转，含歌词
+  playMode: 0 // 播放模式，0循环列表，1随机播放，2单曲循环
 }
 
 const getters = {
@@ -16,7 +17,8 @@ const getters = {
   getPlayState: state => state.playing,
   getSongDetail: state => state.songDetail,
   getSongBarShow: state => state.songBarShow,
-  getPlayInterfaceShow: state => state.playInterfaceShow
+  getPlayInterfaceShow: state => state.playInterfaceShow,
+  getPlayMode: state => state.playMode
 }
 
 const actions = {
@@ -38,6 +40,23 @@ const actions = {
       })
   },
 
+  // 上一首
+  prevSong({ dispatch, state, commit, rootState }) {
+    let tracks = rootState.playlist.displayedListInfo.tracks
+    let songID = state.songID
+    for (let i = 0, len = tracks.length; i < len; i++) {
+      if (tracks[i].id === songID) {
+        if (i === 0) {
+          // 第一首
+          dispatch('changePlayingSong', tracks[len - 1].id)
+        } else {
+          dispatch('changePlayingSong', tracks[i - 1].id)
+        }
+        break
+      }
+    }
+  },
+
   // 下一首
   nextSong({ dispatch, state, commit, rootState }) {
     let tracks = rootState.playlist.displayedListInfo.tracks
@@ -52,6 +71,20 @@ const actions = {
         }
         break
       }
+    }
+  },
+
+  // 随机播放
+  randomSong({ dispatch, state, commit, rootState }) {
+    let tracks = rootState.playlist.displayedListInfo.tracks
+    let len = tracks.length
+    let songID = state.songID
+    let randomID = ''
+    if (len > 1) {
+      while ((randomID = tracks[Math.round(Math.random() * (len - 1))].id) === songID) {}
+      dispatch('changePlayingSong', randomID)
+    } else {
+      dispatch('nextSong')
     }
   }
 }
@@ -98,6 +131,9 @@ const mutations = {
   // 切换播放界面显示状态
   togglePlayInterface(state) {
     state.playInterfaceShow = !state.playInterfaceShow
+  },
+  changePlayMode(state) {
+    state.playMode = (state.playMode + 1) % 3
   }
 }
 

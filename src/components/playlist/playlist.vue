@@ -7,12 +7,12 @@
     <div class="list-info">
       <div class="header">
         <span>播放列表</span>
-        <span class="clear">清空</span>
+        <span class="clear" @click="clearPlaylist">清空</span>
       </div>
       <scroll-lock class="lock-div play-list">
         <ul class="list">
           <li class="list-item" v-for="(item, idx) in listInfo.tracks" :key="idx" @click="playSong(item.id)">
-            <span class="serial-num" :class="{'icon-volume-medium':item.id===playingSongID}" :data-num=idx>{{item.id===playingSongID?'':''}}</span>
+            <span class="serial-num" :class="{'icon-volume-medium':item.id===playingSongID}" :data-num="idx"></span>
             <span class="name">{{item.name}}</span>
             <span class="artist" v-for="(artist, idx) in item.artists" :key="idx"> - {{artist.name}} </span>
           </li>
@@ -52,6 +52,13 @@ export default {
     },
     hidePlaylist() {
       this.$store.commit('togglePlaylist')
+    },
+    clearPlaylist() {
+      // 清空播放列表
+      this.$store.commit('togglePlaylist')
+      this.$store.commit('togglePlayState')
+      this.$store.commit('hideSongBar')
+      this.$store.commit('updateSongID', '')
     }
   }
 }
@@ -59,12 +66,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 .bg-cover {
+  // 黑色半透明背景
   position: fixed;
   left: 0;
   top: 0;
   width: 100%;
   height: 100vh;
-  z-index: 65;
+  z-index: 72;
   background: rgba(0, 0, 0, .4);
 }
 
@@ -83,6 +91,8 @@ export default {
     justify-content: space-between;
     align-items: center;
     span {
+      display: inline-block;
+      line-height: 112px;
       color: #343434;
       flex: 1;
       &.clear {

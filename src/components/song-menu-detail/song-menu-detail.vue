@@ -1,9 +1,9 @@
 <template>
-  <div class="playlist-detail" v-if="playlistDetailShow && listInfo">
+  <div class="songmenu-detail" v-if="listInfo">
     <div class="header">
       <img :src="listInfo.coverImgUrl" class="backdrop">
       <div class="fixed-head">
-        <span @click="hidePlaylistDetail" class="icon-arrow-left2 back-arrow"></span>
+        <span @click="back" class="icon-arrow-left2 back-arrow"></span>
         <span class="name">歌单</span>
         <span class="icon-search search" @click="showSearchList"></span>
       </div>
@@ -49,15 +49,11 @@ export default {
   },
   data() {
     return {
-      backShouldShowUserDetail: true,
       searchListShow: false
     }
   },
 
   computed: {
-    playlistDetailShow() {
-      return this.$store.getters.getPlaylistDetailShow
-    },
     listInfo() {
       return this.$store.getters.getDisplayedListInfo
     },
@@ -66,14 +62,13 @@ export default {
     }
   },
   methods: {
-    hidePlaylistDetail() {
-      this.$store.commit('togglePlaylistDetail') // 隐藏歌单详情
-      if (this.backShouldShowUserDetail) {
-        this.$store.commit('toggleUserDetail') // 显示用户详情
-      }
+    back() {
+      this.$router.go(-1)
     },
     showUserDetail(uid) {
-      this.backShouldShowUserDetail = false
+      this.$router.push({
+        name: 'userinfo'
+      })
       this.$store.dispatch('changeDisplayedUser', uid) // 显示具体用户
     },
     showSearchList() {
@@ -82,20 +77,16 @@ export default {
     hideSearchList() {
       this.searchListShow = false
     }
-  },
-
-  updated() {
-    this.backShouldShowUserDetail = true
   }
 }
 
 </script>
 <style lang="scss" scoped>
-.playlist-detail {
+.songmenu-detail {
   position: absolute;
   left: 0;
   top: 0;
-  z-index: 35;
+  z-index: 43;
   width: 100%;
   background: #F2F4F5;
   min-height: 100%;

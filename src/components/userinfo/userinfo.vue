@@ -1,9 +1,9 @@
 <!-- 用户详情页 -->
 <template>
   <transition name="fade">
-    <scroll-lock class="scroll-lock-div" v-show="isShowUserDetail">
+    <scroll-lock class="scroll-lock-div">
       <div class="user-info" :class="{'songbar-padding':songBarShow}">
-        <div class="back-arrow"><span @click="toggleUserDetail" class="icon-arrow-left2"></span></div>
+        <div class="back-arrow"><span @click="back" class="icon-arrow-left2"></span></div>
         <div class="header" :style="headerBg" v-if="!!profile">
           <div class="avatar">
             <img :src="profile.avatarUrl">
@@ -15,19 +15,19 @@
           </div>
           <!-- 动态关注粉丝3按钮 -->
           <div class="tab" v-if="uid">
-            <router-link @click.native="toggleUserDetail" to="/userevent" class="tab-item">
+            <div class="tab-item">
               <span class="title">动态</span><span>{{profile.eventCount}}</span>
-            </router-link>
-            <router-link @click.native="toggleUserDetail" :to="{path: '/userlist', query:{uid:uid, userlistType:'follows'}}" class="tab-item">
+            </div>
+            <div @click="showUserlist({uid: uid, userlistType:'follows'})" class="tab-item">
               <span class="title">关注</span><span>{{profile.follows}}</span>
-            </router-link>
-            <router-link @click.native="toggleUserDetail" :to="{path: '/userlist', query:{uid:uid, userlistType:'followeds'}}" class="tab-item">
+            </div>
+            <div @click="showUserlist({uid: uid, userlistType:'followeds'})" class="tab-item">
               <span class="title">粉丝</span><span>{{profile.followeds}}</span>
-            </router-link>
+            </div>
           </div>
         </div>
         <!-- 歌单列表 -->
-        <song-menu-list :uid="uid" :playlistShow="playlistShow"></song-menu-list>
+        <song-menu-list :uid="uid"></song-menu-list>
       </div>
     </scroll-lock>
   </transition>
@@ -39,15 +39,7 @@ export default {
   components: {
     songMenuList
   },
-  data() {
-    return {
-      playlistShow: true
-    }
-  },
   computed: {
-    isShowUserDetail() {
-      return this.$store.getters.isShowUserDetail
-    },
     userInfo() {
       return this.$store.getters.getDisplayedUserInfo
     },
@@ -70,8 +62,14 @@ export default {
   },
 
   methods: {
-    toggleUserDetail() {
-      this.$store.commit('toggleUserDetail')
+    showUserlist(detail) {
+      this.$router.push({
+        name: 'userlist',
+        params: detail
+      })
+    },
+    back() {
+      this.$router.go(-1)
     }
   }
 }
@@ -84,15 +82,14 @@ export default {
   height: 100vh;
   left: 0;
   top: 0;
-  z-index: 42;
   overflow: scroll;
 }
+
 .user-info {
   position: absolute;
   left: 0;
   top: 0;
-  width: 100%;
-  // background: rgba(0, 0, 0, .1);
+  width: 100%; // background: rgba(0, 0, 0, .1);
   .back-arrow {
     // 返回箭头
     position: fixed;
@@ -100,7 +97,7 @@ export default {
     left: 0;
     top: 0;
     color: #fff;
-    z-index: 50;
+    z-index: 10;
     width: 100%;
     height: 112px;
     background: rgba(0, 0, 0, .05);
@@ -176,7 +173,7 @@ export default {
       bottom: 0;
       height: 88px;
       background: rgba(0, 0, 0, .3);
-      z-index: 50;
+      z-index: 10;
 
       .tab-item {
         flex: 1;
@@ -185,6 +182,7 @@ export default {
         justify-content: center;
         align-items: center;
         font-size: 28px;
+        z-index: 20;
         span {
           padding: 4px;
         }
