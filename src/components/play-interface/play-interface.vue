@@ -1,11 +1,11 @@
 <template>
-  <div class="play-interface" v-if="playInterfaceShow && songDetail">
+  <div class="play-interface" v-if="songDetail">
     <div class="bg">
       <img :src="songDetail.al.picUrl">
     </div>
     <div class="content">
       <div class="header">
-        <span class="back-arrow icon-arrow-left2" @click="hidePlayInterface"></span>
+        <span class="back-arrow icon-arrow-left2" @click="back"></span>
         <div class="name-artist">
           <div class="name">{{songDetail.name}}</div>
           <div class="artist">
@@ -13,19 +13,24 @@
           </div>
         </div>
       </div>
-      <div class="main">
-        <div class="positive">
-          <div class="cd-bar" :class="{'rotate-bar':!playing}">
+      <div class="main" @click="togglePositive">
+        <!-- 正面 -->
+        <div class="positive" v-show="showPositive">
+          <span class="cd-bar" :class="{'rotate-bar':!playing}">
             <img src="../../assets/cd-bar.png" height="414" width="276" alt="">
-          </div>
+          </span>
           <div class="cd-mine rotate-cd-mine" :class="{'animated':playing,'paused':!playing}">
             <img :src="songDetail.al.picUrl">
           </div>
         </div>
-        <div class="negative">反面</div>
+        <!-- 反面 -->
+        <div class="negative" v-show="!showPositive">
+          <volume-bar class="volume-bar"></volume-bar>
+          <lyric class="lyric"></lyric>
+        </div>
       </div>
       <div class="footer">
-        <div class="progress-bar">进度条</div>
+        <progress-bar class="progress-bar"></progress-bar>
         <div class="menus">
           <span class="play-mode" :class="playModeClass" @click="changePlayMode"></span>
           <span class="icon-previous prev-btn" @click="prevSong"></span>
@@ -38,7 +43,21 @@
   </div>
 </template>
 <script>
+import progressBar from '../progress-bar/progress-bar.vue'
+import volumeBar from '../volume-bar/volume-bar.vue'
+import lyric from '../lyric/lyric.vue'
+
 export default {
+  components: {
+    'progress-bar': progressBar,
+    'volume-bar': volumeBar,
+    'lyric': lyric
+  },
+  data() {
+    return {
+      showPositive: true // 显示正面
+    }
+  },
   computed: {
     playInterfaceShow() {
       return this.$store.getters.getPlayInterfaceShow
@@ -80,12 +99,17 @@ export default {
       // 显示播放列表
       this.$store.commit('togglePlaylist')
     },
-    hidePlayInterface() {
-      // 隐藏歌曲详情
-      this.$store.commit('togglePlayInterface')
+    back() {
+      // 返回
+      this.$router.go(-1)
     },
     changePlayMode() {
+      // 改变播放模式
       this.$store.commit('changePlayMode')
+    },
+    togglePositive() {
+      // 切换正反面
+      this.showPositive = !this.showPositive
     }
   }
 }
@@ -125,9 +149,8 @@ export default {
 
   .header {
     width: 100%;
-    flex: 0 0 118px;
-    height: 118px;
-    border-bottom: 1px solid #fff;
+    flex: 0 0 128px;
+    height: 128px;
     display: flex;
     align-items: center;
     .back-arrow {
@@ -168,12 +191,18 @@ export default {
   }
   .main {
     flex: 1;
+    user-select: none;
+    overflow: hidden;
     .positive {
       // 正面
+      height: 100%;
+      overflow: hidden;
+      box-shadow: 0px -1px 1px -1px #928980;
       .cd-bar {
-        position: absolute;
-        left: 46vw;
-        top: 84px;
+        display: inline-block;
+        position: relative;
+        left: 8%;
+        top: -32px;
         width: auto;
         height: 300px;
         z-index: 1;
@@ -207,11 +236,22 @@ export default {
         }
       }
     }
+    .negative {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      .volume-bar {
+        flex: 0 0 50px;
+      }
+      .lyric {
+        flex: 1;
+      }
+    }
   }
 
   .footer {
     // 底部控制菜单
-    flex: 0 0 200px;
+    flex: 0 0 240px;
     width: 100%;
     bottom: 0;
     color: #fff;
@@ -220,7 +260,8 @@ export default {
     align-items: center;
     .progress-bar {
       // 进度条
-      flex: 0 0 40px;
+      flex: 0 0 20px;
+      padding-top: 20px;
     }
     .menus {
       flex: 1;

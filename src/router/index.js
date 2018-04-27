@@ -9,6 +9,7 @@ import Heart from '@/components/heart/heart'
 import UserInfo from '@/components/userinfo/userinfo' // 用户详情
 import Userlist from '@/components/userlist/userlist' // 用户列表
 import SongMenuDetail from '@/components/song-menu-detail/song-menu-detail' // 用户列表
+import PlayInterface from '@/components/play-interface/play-interface' // 播放界面
 Vue.use(Router)
 
 export default new Router({
@@ -40,6 +41,11 @@ export default new Router({
     path: '/song-menu-detail',
     name: 'song-menu-detail',
     component: SongMenuDetail
+  },
+  {
+    path: '/play-interface',
+    name: 'play-interface',
+    component: PlayInterface
   },
   {
     path: '/search',

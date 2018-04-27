@@ -45,7 +45,7 @@ export default {
     },
     showPlayInterface() {
       // 显示转盘界面
-      this.$store.commit('togglePlayInterface')
+      this.$router.push({name: 'play-interface'})
     }
   }
 }

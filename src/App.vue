@@ -4,7 +4,6 @@
     <songbar></songbar>
     <song></song>
     <playlist></playlist>
-    <play-interface></play-interface>
     <keep-alive>
       <router-view/>
     </keep-alive>
@@ -15,15 +14,13 @@ import header from './components/header/header.vue'
 import songbar from './components/songbar/songbar.vue'
 import song from './components/song/song.vue'
 import playlist from './components/playlist/playlist.vue'
-import playInterface from './components/play-interface/play-interface.vue'
 
 export default {
   components: {
     'v-header': header,
     songbar,
     song,
-    playlist,
-    'play-interface': playInterface
+    playlist
   },
 
   mounted() {

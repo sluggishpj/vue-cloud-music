@@ -7,8 +7,12 @@ const state = {
   songDetail: '', // 当前播放的歌的详细信息
   playing: false, // 当前是否正在播放
   songBarShow: false, // 底部是否显示播放控制条
-  playInterfaceShow: false, // 显示播放界面，一个盘子在转，含歌词
-  playMode: 0 // 播放模式，0循环列表，1随机播放，2单曲循环
+  playMode: 0, // 播放模式，0循环列表，1随机播放，2单曲循环
+  currentTime: '', // 当前已播放时长
+  duration: 0, // 歌曲总长
+  targetTime: 0, // 目标时间
+  progressBarDragging: false, // 是否正在拖拽进度
+  volume: 0.6 // 音量
 }
 
 const getters = {
@@ -17,8 +21,12 @@ const getters = {
   getPlayState: state => state.playing,
   getSongDetail: state => state.songDetail,
   getSongBarShow: state => state.songBarShow,
-  getPlayInterfaceShow: state => state.playInterfaceShow,
-  getPlayMode: state => state.playMode
+  getPlayMode: state => state.playMode,
+  getCurrentTime: state => state.currentTime,
+  getDuration: state => state.duration,
+  getTargetTime: state => state.targetTime,
+  getProgressBarDragging: state => state.progressBarDragging,
+  getVolume: state => state.volume
 }
 
 const actions = {
@@ -124,16 +132,41 @@ const mutations = {
     state.songBarShow = true
     console.log('show songbar')
   },
+
+  // 隐藏歌曲底部条
   hideSongBar(state) {
     state.songBarShow = false
     console.log('hide songbar')
   },
-  // 切换播放界面显示状态
-  togglePlayInterface(state) {
-    state.playInterfaceShow = !state.playInterfaceShow
-  },
+
+  // 改变播放模式
   changePlayMode(state) {
     state.playMode = (state.playMode + 1) % 3
+  },
+
+  // 改变当前进度时间
+  changeCurrentTime(state, currentTime) {
+    state.currentTime = currentTime
+  },
+
+  // 更新歌曲总时长
+  updateDuration(state, duration) {
+    state.duration = duration
+  },
+
+  // 更新目标时间
+  changeTargetTime(state, targetTime) {
+    state.targetTime = targetTime
+  },
+
+  // 更改拖拽状态
+  changeProgressBarDragging(state, dragging) {
+    state.progressBarDragging = dragging
+  },
+
+  // 改变音量大小
+  changeVolume(state, volume) {
+    state.volume = volume
   }
 }
 
