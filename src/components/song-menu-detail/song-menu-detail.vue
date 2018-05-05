@@ -1,3 +1,4 @@
+<!-- 歌单详情 -->
 <template>
   <div class="songmenu-detail" v-if="listInfo">
     <div class="header">
@@ -32,20 +33,28 @@
         </div>
       </div>
     </div>
-    <songlist :list-info="listInfo"></songlist>
+    <div class="play-all">
+      <span class="icon-play2 play-btn"></span>
+      <span class="title">播放全部<span class="count">(共{{listInfo.trackCount}}首)</span></span>
+    </div>
+
+    <!-- 歌曲列表 -->
+    <songlist :tracks="listInfo.tracks"></songlist>
+
+    <!-- 本地搜索 -->
     <scroll-lock class="lock-div" v-if="searchListShow" :lock="true" :bodyLock="true">
-      <searchlist :tracks="listInfo.tracks" @hideSearchList="hideSearchList" :playingSongID="playingSongID"></searchlist>
+      <local-search :tracks="listInfo.tracks" @hideSearchList="hideSearchList"></local-search>
     </scroll-lock>
   </div>
 </template>
 <script>
 import songlist from '../songlist/songlist.vue'
-import searchlist from '../search/search.vue'
+import localSearch from '../local-search/local-search.vue'
 
 export default {
   components: {
     songlist,
-    searchlist
+    'local-search': localSearch
   },
   data() {
     return {
@@ -56,9 +65,6 @@ export default {
   computed: {
     listInfo() {
       return this.$store.getters.getDisplayedListInfo
-    },
-    playingSongID() {
-      return this.$store.getters.getSongID
     }
   },
   methods: {
@@ -214,7 +220,25 @@ export default {
     }
   }
 
-  // 搜索列表
+  .play-all {
+    // 播放全部
+    height: 102px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border-bottom: 1px solid #DADCDD;
+    .play-btn {
+      font-size: 40px;
+      padding: 20px;
+    }
+    .title {
+      // 播放全部字
+      .count {
+        color: #999999;
+        font-size: 28px;
+      }
+    }
+  } // 搜索列表
   .lock-div {
     position: absolute;
     left: 0;

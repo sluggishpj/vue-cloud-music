@@ -15,7 +15,6 @@
 export default {
   computed: {
     volume() {
-      console.log('volume', this.$store.getters.getVolume)
       return this.$store.getters.getVolume
     },
     nowVolumeBarStyle() {
@@ -67,36 +66,30 @@ export default {
 
     // 鼠标相关
     onThumbMouseDown(e) {
-      console.log('mousedown')
       this.app.addEventListener('mousemove', this.onThumbMouseMove, false)
       this.app.addEventListener('mouseup', this.onThumbMouseUp, false)
     },
 
     onThumbMouseMove(e) {
-      console.log('mousemove')
       this.thumbMove(e.clientX)
     },
 
     onThumbMouseUp(e) {
-      console.log('mouseup')
       this.app.removeEventListener('mousemove', this.onThumbMouseMove, false)
       this.app.removeEventListener('mouseup', this.onThumbMouseUp, false)
     },
 
     // 触屏相关
     onThumbTouchStart(e) {
-      console.log('touchstart')
       this.app.addEventListener('touchmove', this.onThumbTouchMove, false)
       this.app.addEventListener('touchend', this.onThumbTouchEnd, false)
     },
 
     onThumbTouchMove(e) {
-      console.log('touchmove')
       this.thumbMove(e.touches[0].clientX)
     },
 
     onThumbTouchEnd(e) {
-      console.log('touchEnd')
       this.app.removeEventListener('touchmove', this.onThumbTouchMove, false)
       this.app.removeEventListener('touchend', this.onThumbTouchEnd, false)
     },

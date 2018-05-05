@@ -1,35 +1,33 @@
 <!-- 用户详情页 -->
 <template>
   <transition name="fade">
-    <scroll-lock class="scroll-lock-div">
-      <div class="user-info" :class="{'songbar-padding':songBarShow}">
-        <div class="back-arrow"><span @click="back" class="icon-arrow-left2"></span></div>
-        <div class="header" :style="headerBg" v-if="!!profile">
-          <div class="avatar">
-            <img :src="profile.avatarUrl">
+    <div class="user-info" :class="{'songbar-padding':songBarShow}" ref="userInfo">
+      <div class="back-arrow"><span @click="back" class="icon-arrow-left2"></span></div>
+      <div class="header" :style="headerBg" v-if="!!profile">
+        <div class="avatar">
+          <img :src="profile.avatarUrl">
+        </div>
+        <div class="nick-level">
+          <span class="nickname">{{profile.nickname}}</span>
+          <span class="gender" v-show="profile.gender">{{profile.gender === 1?'♂':'♀'}}</span>
+          <span class="level">Lv.{{userInfo.level}}</span>
+        </div>
+        <!-- 动态关注粉丝3按钮 -->
+        <div class="tab" v-if="uid">
+          <div class="tab-item">
+            <span class="title">动态</span><span>{{profile.eventCount}}</span>
           </div>
-          <div class="nick-level">
-            <span class="nickname">{{profile.nickname}}</span>
-            <span class="gender" v-show="profile.gender">{{profile.gender === 1?'♂':'♀'}}</span>
-            <span class="level">Lv.{{userInfo.level}}</span>
+          <div @click="showUserlist({uid: uid, userlistType:'follows'})" class="tab-item">
+            <span class="title">关注</span><span>{{profile.follows}}</span>
           </div>
-          <!-- 动态关注粉丝3按钮 -->
-          <div class="tab" v-if="uid">
-            <div class="tab-item">
-              <span class="title">动态</span><span>{{profile.eventCount}}</span>
-            </div>
-            <div @click="showUserlist({uid: uid, userlistType:'follows'})" class="tab-item">
-              <span class="title">关注</span><span>{{profile.follows}}</span>
-            </div>
-            <div @click="showUserlist({uid: uid, userlistType:'followeds'})" class="tab-item">
-              <span class="title">粉丝</span><span>{{profile.followeds}}</span>
-            </div>
+          <div @click="showUserlist({uid: uid, userlistType:'followeds'})" class="tab-item">
+            <span class="title">粉丝</span><span>{{profile.followeds}}</span>
           </div>
         </div>
-        <!-- 歌单列表 -->
-        <song-menu-list :uid="uid"></song-menu-list>
       </div>
-    </scroll-lock>
+      <!-- 歌单列表 -->
+      <song-menu-list :uid="uid"></song-menu-list>
+    </div>
   </transition>
 </template>
 <script>
@@ -38,6 +36,13 @@ import songMenuList from '../song-menu-list/song-menu-list.vue'
 export default {
   components: {
     songMenuList
+  },
+  data() {
+    return {
+      headerBarBg: {
+        background: 'rgba(0, 0, 0, .05)'
+      }
+    }
   },
   computed: {
     userInfo() {
@@ -76,20 +81,14 @@ export default {
 
 </script>
 <style lang="scss" scoped>
-.scroll-lock-div {
-  position: fixed;
-  width: 100%;
-  height: 100vh;
-  left: 0;
-  top: 0;
-  overflow: scroll;
-}
-
 .user-info {
   position: absolute;
+  box-sizing: border-box;
   left: 0;
   top: 0;
-  width: 100%; // background: rgba(0, 0, 0, .1);
+  width: 100%;
+  min-height: 100vh;
+  background: #f2f4f5;
   .back-arrow {
     // 返回箭头
     position: fixed;

@@ -107,19 +107,16 @@ export default {
 
     // 鼠标相关
     onThumbMouseDown(e) {
-      console.log('mousedown')
       this.thumbStart()
       this.app.addEventListener('mousemove', this.onThumbMouseMove, false)
       this.app.addEventListener('mouseup', this.onThumbMouseUp, false)
     },
 
     onThumbMouseMove(e) {
-      console.log('mousemove')
       this.thumbMove(e.clientX)
     },
 
     onThumbMouseUp(e) {
-      console.log('mouseup')
       this.thumbEnd()
       this.app.removeEventListener('mousemove', this.onThumbMouseMove, false)
       this.app.removeEventListener('mouseup', this.onThumbMouseUp, false)
@@ -127,19 +124,16 @@ export default {
 
     // 触屏相关
     onThumbTouchStart(e) {
-      console.log('touchstart')
       this.thumbStart()
       this.app.addEventListener('touchmove', this.onThumbTouchMove, false)
       this.app.addEventListener('touchend', this.onThumbTouchEnd, false)
     },
 
     onThumbTouchMove(e) {
-      console.log('touchmove')
       this.thumbMove(e.touches[0].clientX)
     },
 
     onThumbTouchEnd(e) {
-      console.log('touchEnd')
       this.thumbEnd()
       this.app.removeEventListener('touchmove', this.onThumbTouchMove, false)
       this.app.removeEventListener('touchend', this.onThumbTouchEnd, false)

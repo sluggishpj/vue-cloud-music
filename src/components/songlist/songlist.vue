@@ -1,12 +1,8 @@
 <!-- 歌曲列表 -->
 <template>
   <div class="songlist" :class="{'songbar-padding':songBarShow}">
-    <div class="header">
-      <span class="icon-play2 play-btn"></span>
-      <span class="title">播放全部<span class="count">(共{{listInfo.trackCount}}首)</span></span>
-    </div>
     <ul class="song-list">
-      <li class="list-item" v-for="(item, idx) in listInfo.tracks" :key="idx" @click="playSong(item.id)">
+      <li class="list-item" v-for="(item, idx) in tracks" :key="idx" @click="playSong(item.id)">
         <span class="serial-num" :class="{'icon-volume-medium':item.id===playingSongID}">{{item.id===playingSongID?'':(idx+1)}}</span>
         <div class="item-detail">
           <div class="name">{{item.name}}</div>
@@ -30,7 +26,7 @@ export default {
     }
   },
   props: {
-    listInfo: {}
+    tracks: {}
   },
   methods: {
     playSong(id) {
@@ -44,24 +40,6 @@ export default {
 <style lang="scss" scoped>
 .songlist {
   width: 100%; // overflow: hidden;
-  .header {
-    height: 102px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    border-bottom: 1px solid #DADCDD;
-    .play-btn {
-      font-size: 40px;
-      padding: 20px;
-    }
-    .title {
-      // 播放全部字
-      .count {
-        color: #999999;
-        font-size: 28px;
-      }
-    }
-  }
   .list-item {
     display: flex;
     position: relative;

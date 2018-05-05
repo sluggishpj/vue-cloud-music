@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import OnlineMusic from '@/components/onlinemusic/onlinemusic'
-import Search from '@/components/search/search'
+import OnlineSearch from '@/components/online-search/online-search'
 import PrivateFM from '@/components/privateFM/privateFM'
 import DayRecommend from '@/components/dayrecommend/dayrecommend'
 import Grin from '@/components/grin/grin'
@@ -48,9 +48,9 @@ export default new Router({
     component: PlayInterface
   },
   {
-    path: '/search',
-    name: 'search',
-    component: Search
+    path: '/online-search',
+    name: 'online-search',
+    component: OnlineSearch
   },
   {
     path: '/grin',

@@ -330,7 +330,7 @@ watch: {
 
 ```
 
-6. rotate不适用于inline元素
+6. transform对inline元素不起作用
 
 7. `<router-link>`绑定点击事件需要使用`.native`修饰符
 
@@ -340,4 +340,9 @@ watch: {
 </router-link>
 ```
 
-8. 通过路由给子组件传递数据
+8. 扩大点击区域
+
+```scss
+background-clip: padding-box; // 避免背景扩张到border区域
+border-top: 20px transparent solid; // 增加透明border扩大点击区域
+```

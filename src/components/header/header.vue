@@ -9,7 +9,7 @@
       <!-- 中间三路由 -->
       <div class="main-menu">
         <div class="online-music">
-          <router-link to="onlinemusic">
+          <router-link to="online-music">
             <span class="icon-music"></span>
           </router-link>
         </div>
@@ -26,7 +26,7 @@
       </div>
       <!-- 搜索按钮 -->
       <div class="search-menu">
-        <router-link to="search">
+        <router-link to="online-search">
           <span class="icon-search"></span>
         </router-link>
       </div>
@@ -50,7 +50,6 @@ export default {
   methods: {
     // 隐藏侧边栏
     hideSidebar() {
-      console.log('hideSidebar')
       this.sidebarShow = false
     }
   }

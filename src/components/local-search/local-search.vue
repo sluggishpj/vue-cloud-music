@@ -1,26 +1,17 @@
-<!-- 搜索 -->
+<!-- 本地搜索 -->
 <template>
   <div class="searchlist">
     <div class="fixed-head">
       <span @click="hideSearchList" class="icon-arrow-left2 back-arrow"></span>
-      <input v-model.trim="searchWord" class="search-word" ref="searchWord">
+      <input v-model="searchWord" class="search-word" ref="searchWord">
       <span class="clear-all" @click="clearAll">×</span>
     </div>
-    <ul class="list" :class="{'songbar-padding':songBarShow}">
-      <li class="list-item" v-for="(item, idx) in searchSongList" :key="idx" @click="playSong(item.id)">
-        <span class="serial-num" :class="{'icon-volume-medium':item.id===playingSongID}">{{item.id===playingSongID?'':(idx+1)}}</span>
-        <div class="item-detail">
-          <div class="name">{{item.name}}</div>
-          <div class="artist-album">
-            <span class="artists" v-for="(artist, idx) in item.artists" :key="idx">{{artist.name}} </span>
-            <span class="album">- {{item.album.name}}</span>
-          </div>
-        </div>
-      </li>
-    </ul>
+    <songlist :tracks="searchSongList"></songlist>
   </div>
 </template>
 <script>
+import songlist from '../songlist/songlist.vue'
+
 export default {
   props: {
     tracks: {
@@ -28,8 +19,10 @@ export default {
       default () {
         return []
       }
-    },
-    playingSongID: ''
+    }
+  },
+  components: {
+    songlist
   },
   data() {
     return {
@@ -125,50 +118,6 @@ export default {
     color: #000;
     font-size: 64px;
     flex: 0 0 112px;
-  }
-}
-
-.list-item {
-  display: flex;
-  position: relative;
-  align-items: center;
-  height: 128px;
-  width: 100%;
-  .serial-num {
-    color: #999999;
-    flex: 0 0 110px;
-    &.icon-volume-medium {
-      color: #CE3D3E;
-    }
-  }
-  .item-detail {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    height: 100%;
-    white-space: nowrap;
-    border-bottom: 1px solid #DADCDD;
-    overflow: hidden;
-    .name {
-      // 歌名
-      width: 100%;
-      text-align: left;
-      overflow: hidden;
-      text-align: left;
-      text-overflow: ellipsis;
-    }
-    .artist-album {
-      // 作者及唱片
-      width: 100%;
-      padding-top: 20px;
-      font-size: 24px;
-      color: #999999;
-      overflow: hidden;
-      text-align: left;
-      text-overflow: ellipsis;
-    }
   }
 }
 
